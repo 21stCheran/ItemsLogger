@@ -1,0 +1,18 @@
+debug: false
+
+# Database config
+mysql:
+  hostname: localhost
+  port: 3306
+  username: root
+  password: 
+  database: db
+  
+inventoryStorageType:
+   death:
+      enabled: true #saves inventories on player death
+   time:
+      enabled: true
+      recursive: 60 #saves inventories every X minutes
+   restart:
+      enabled: true #saves inventories on server restart
