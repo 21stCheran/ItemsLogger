@@ -7,7 +7,7 @@
 
 	<groupId>com.twentyonec</groupId>
 	<artifactId>ItemsLogger</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>ItemsLogger</name>
 	<!-- FIXME change it to the project's website -->
@@ -59,8 +59,6 @@
 	</dependencies>
 
 	<build>
-		<pluginManagement><!-- lock down plugins versions to avoid using Maven 
-				defaults (may be moved to parent pom) -->
 			<plugins>
 				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
 				<plugin>
@@ -123,6 +121,5 @@
 					</executions>
 				</plugin>
 			</plugins>
-		</pluginManagement>
 	</build>
 </project>

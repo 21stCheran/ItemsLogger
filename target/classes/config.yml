@@ -6,13 +6,10 @@ mysql:
   port: 3306
   username: root
   password: 
-  database: db
+  database: 21C
   
 inventoryStorageType:
    death:
       enabled: true #saves inventories on player death
-   time:
-      enabled: true
-      recursive: 60 #saves inventories every X minutes
    restart:
       enabled: true #saves inventories on server restart

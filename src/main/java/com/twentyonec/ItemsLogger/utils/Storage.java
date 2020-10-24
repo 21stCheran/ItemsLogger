@@ -1,9 +1,11 @@
 package com.twentyonec.ItemsLogger.utils;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.zaxxer.hikari.HikariConfig;
@@ -77,60 +79,79 @@ public class Storage {
 		}
 
 	}
-	
+
 	public Connection getConnection() throws SQLException {
-        return this.dataSource.getConnection();
-    }
-	
+		return this.dataSource.getConnection();
+	}
+
 	public void update(final String sql) {
 
-        try (Connection connection = this.getConnection()) {
+		try (Connection connection = this.getConnection()) {
 
-            PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = connection.prepareStatement(sql);
 
-            plugin.debugMessage("Preparing statement for update.");
-            statement.executeUpdate();
-            plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
+			plugin.debugMessage("Preparing statement for update.");
+			statement.executeUpdate();
+			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
-        } catch (SQLException e) {
-            plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
-            e.printStackTrace();
-        }
+		} catch (SQLException e) {
+			plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
+			e.printStackTrace();
+		}
 
-    }
-	
+	}
+
+	public void update(String sql, Date date, Timestamp time) {
+
+		try (Connection connection = this.getConnection()) {
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setDate(1, date);
+			statement.setTimestamp(2, time);
+
+			plugin.debugMessage("Preparing statement for update.");
+			statement.executeUpdate();
+			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
+
+		} catch (SQLException e) {
+			plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
+			e.printStackTrace();
+		}
+
+	}
+
 	public ResultSet query(final String sql) {
 
-        try (Connection connection = this.getConnection()){
+		try (Connection connection = this.getConnection()){
 
-            PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = connection.prepareStatement(sql);
 
-          plugin.debugMessage("Preparing statement for query.");
-            ResultSet resultSet = statement.executeQuery(sql);
-          plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
+			plugin.debugMessage("Preparing statement for query.");
+			ResultSet resultSet = statement.executeQuery(sql);
+			plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
 
-            return resultSet;
-        } catch (SQLException e) {
-          plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
-            e.printStackTrace();
+			return resultSet;
+		} catch (SQLException e) {
+			plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
+			e.printStackTrace();
+			return null;
+		}
+	}
 
-            return null;
-        }
-    }
-	
 	public void setUpTable() {
-        this.connect();
+		this.connect();
 
-        plugin.debugMessage("Attempting to set up tables if they do not exist.");
-        final String update = "CREATE TABLE IF NOT EXISTS itemslogger("
-        		+ "uuid VARCHAR(36) NOT NULL UNIQUE,"
-        		+ "inventory VARCHAR(36) NOT NULL,"
-        		+ "cause VARCHAR(36) NOT NULL,"
-        		+ "loc_x REAL NOT NULL,"
-        		+ "loc_y REAL NOT NULL,"
-        		+ "loc_z REAL NOT NULL,"
-        		+ "experience REAL,"
-        		+ "date TIMESTAMP NOT NULL);";
-        this.update(update);
-    }
+		plugin.debugMessage("Attempting to set up tables if they do not exist.");
+		final String update = "CREATE TABLE IF NOT EXISTS itemslogger("
+				+ "uuid VARCHAR(36) NOT NULL, "
+				+ "inventory VARCHAR(255) NOT NULL, "
+				+ "cause VARCHAR(255) NOT NULL, "
+				+ "loc_x REAL NOT NULL, "
+				+ "loc_y REAL NOT NULL, "
+				+ "loc_z REAL NOT NULL, "
+				+ "experience REAL NOT NULL, "
+				+ "date DATE NOT NULL, "
+				+ "time TIME NOT NULL);";
+		this.update(update);
+	}
 }
