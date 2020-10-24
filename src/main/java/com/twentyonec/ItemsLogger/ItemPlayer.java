@@ -1,10 +1,20 @@
 package com.twentyonec.ItemsLogger;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.twentyonec.ItemsLogger.utils.Storage;
 
@@ -35,9 +45,38 @@ public class ItemPlayer {
 		this.date = new Date(longDate.getTime());
 		this.time = new Timestamp(longDate.getTime());
 
+		//remove null fixer and serials later into serizlie.java
+		final List<ItemStack> itemlist = Arrays
+				.asList(player.getInventory().getContents())
+				.stream()
+				.filter(stack -> stack != null)
+				.collect(Collectors.toList());
+		ItemStack[] items = itemlist.toArray(new ItemStack[0]);
+
+		for (ItemStack item : items) {
+			HashMap<String, Object> map =  (HashMap<String, Object>) item.serialize(); 
+
+			try {
+				//serialize
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ObjectOutputStream objOut = new ObjectOutputStream(out);
+				objOut.writeObject(map);
+				objOut.close();
+
+				//deserialize
+				ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(out.toByteArray()));
+				HashMap<String, Object> actual = (HashMap<String, Object>) objIn.readObject();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public ItemPlayer (final Player player) {
+
 
 		this.uuid = player.getUniqueId();
 		this.inv = player.getInventory().getStorageContents().toString();
@@ -67,6 +106,10 @@ public class ItemPlayer {
 
 	public void loadPlayer() {
 		//TODO
+	}
+
+	public void serialize() {
+
 	}
 
 }
