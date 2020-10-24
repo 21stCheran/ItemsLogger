@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import com.twentyonec.ItemsLogger.utils.Serialize;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
 public class ItemPlayer {
@@ -23,32 +24,30 @@ public class ItemPlayer {
 	private final Timestamp time;
 
 	public ItemPlayer(final Player player, final String cause) {
+		final java.util.Date longDate = new java.util.Date();
 
 		this.uuid = player.getUniqueId();
-		this.inv = player.getInventory().getStorageContents().toString();
+		this.inv = Serialize.itemSerialize(player.getInventory().getContents());
 		this.x = player.getLocation().getBlockX();
 		this.y = player.getLocation().getBlockY();
 		this.z = player.getLocation().getBlockZ();
 		this.experience = player.getTotalExperience();
 		this.cause = cause;
-
-		final java.util.Date longDate = new java.util.Date();
 		this.date = new Date(longDate.getTime());
 		this.time = new Timestamp(longDate.getTime());
 
 	}
 
 	public ItemPlayer(final Player player) {
+		final java.util.Date longDate = new java.util.Date();
 
 		this.uuid = player.getUniqueId();
-		this.inv = player.getInventory().getStorageContents().toString();
+		this.inv = Serialize.itemSerialize(player.getInventory().getContents());
 		this.x = player.getLocation().getBlockX();
 		this.y = player.getLocation().getBlockY();
 		this.z = player.getLocation().getBlockZ();
 		this.experience = player.getTotalExperience();
 		this.cause = "Restart";
-
-		final java.util.Date longDate = new java.util.Date();
 		this.date = new Date(longDate.getTime());
 		this.time = new Timestamp(longDate.getTime());
 
