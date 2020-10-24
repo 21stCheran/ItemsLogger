@@ -11,7 +11,7 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 public class ItemPlayer {
 
 	ItemsLogger plugin = ItemsLogger.getPlugin();
-	Storage storage = plugin.getStorageManager(); //change and check later
+	Storage storage = Storage.getStorage(plugin);
 
 	private final UUID uuid;
 	private final String inv;
