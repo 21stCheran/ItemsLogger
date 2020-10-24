@@ -15,7 +15,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 public class Serialize {
 
-	public static String itemSerialize(ItemStack[] invItems) {
+	public static String itemSerialize(final ItemStack[] invItems) {
 
 		final List<ItemStack> itemlist = Arrays
 				.asList(invItems)
@@ -23,39 +23,39 @@ public class Serialize {
 				.filter(stack -> stack != null)
 				.collect(Collectors.toList());
 		
-		ItemStack[] items = itemlist.toArray(new ItemStack[0]);
+		final ItemStack[] items = itemlist.toArray(new ItemStack[0]);
 
 		try {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			ObjectOutputStream objOut = new ObjectOutputStream(out);
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			final ObjectOutputStream objOut = new ObjectOutputStream(out);
 			objOut.writeInt(items.length);
 
-			for (ItemStack item : items) {
-				HashMap<String, Object> map = (HashMap<String, Object>) item.serialize();
+			for (final ItemStack item : items) {
+				final HashMap<String, Object> map = (HashMap<String, Object>) item.serialize();
 				objOut.writeObject(map);
 			}
 
 			objOut.close();
-			String data = Base64Coder.encodeLines(out.toByteArray());
+			final String data = Base64Coder.encodeLines(out.toByteArray());
 			
 			return data;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static ItemStack[] itemDeserialize(String data) {
+	public static ItemStack[] itemDeserialize(final String data) {
 
-		byte[] byteArray = Base64Coder.decodeLines(data);
+		final byte[] byteArray = Base64Coder.decodeLines(data);
 
 		try {
-			ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(byteArray));
-			ItemStack[] items = new ItemStack[objIn.readInt()];
+			final ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(byteArray));
+			final ItemStack[] items = new ItemStack[objIn.readInt()];
 
 			for (int i = 0; i < items.length; i++) {
-				HashMap<String, Object> map = (HashMap<String, Object>) objIn.readObject();
+				final HashMap<String, Object> map = (HashMap<String, Object>) objIn.readObject();
 				items[i] = ItemStack.deserialize(map);
 			}
 

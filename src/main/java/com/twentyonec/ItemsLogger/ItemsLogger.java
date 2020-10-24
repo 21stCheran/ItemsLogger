@@ -41,8 +41,8 @@ public class ItemsLogger extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		debugMessage("Attempting to save all player data");
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			ItemPlayer itemPlayer = new ItemPlayer(player);
+		for (final Player player : Bukkit.getOnlinePlayers()) {
+			final ItemPlayer itemPlayer = new ItemPlayer(player);
 			itemPlayer.savePlayer();
 		}
 	}
@@ -55,7 +55,7 @@ public class ItemsLogger extends JavaPlugin {
 		return config;
 	}
 
-	public void debugMessage(String message) {
+	public void debugMessage(final String message) {
 		if (config.getDebug())
 			plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
 	}

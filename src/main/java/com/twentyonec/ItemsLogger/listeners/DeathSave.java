@@ -13,11 +13,11 @@ public class DeathSave implements Listener {
 	ItemsLogger plugin = ItemsLogger.getPlugin();
 
 	@EventHandler
-	public void onDeathSave(PlayerDeathEvent event) {
+	public void onDeathSave(final PlayerDeathEvent event) {
 
-		Player player = event.getEntity();
-		String cause = event.getDeathMessage();
-		ItemPlayer itemPlayer = new ItemPlayer(player, cause);
+		final Player player = event.getEntity();
+		final String cause = event.getDeathMessage();
+		final ItemPlayer itemPlayer = new ItemPlayer(player, cause);
 
 		plugin.debugMessage("Attempting to save player data");
 		itemPlayer.savePlayer();
