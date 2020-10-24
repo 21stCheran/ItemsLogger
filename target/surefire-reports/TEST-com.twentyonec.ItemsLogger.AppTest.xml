@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.twentyonec.ItemsLogger.AppTest" time="0.066" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.twentyonec.ItemsLogger.AppTest" time="0.037" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="13"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="CA"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-13.0.1.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter15925080229959639605.jar /Users/cheran/eclipse-workspace/ItemsLogger/target/surefire 2020-10-24T13-17-28_271-jvmRun1 surefire13497225437899369354tmp surefire_012510989042689230382tmp"/>
+    <property name="sun.java.command" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter5473623393934094169.jar /Users/cheran/eclipse-workspace/ItemsLogger/target/surefire 2020-10-24T14-53-07_449-jvmRun1 surefire16528484061531120434tmp surefire_04731711906671386789tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/test-classes:/Users/cheran/eclipse-workspace/ItemsLogger/target/classes:/Users/cheran/.m2/repository/junit/junit/4.11/junit-4.11.jar:/Users/cheran/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/cheran/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/Users/cheran/.m2/repository/org/spigotmc/spigot-api/1.16.3-R0.1-SNAPSHOT/spigot-api-1.16.3-R0.1-SNAPSHOT.jar:/Users/cheran/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/Users/cheran/.m2/repository/com/google/guava/guava/21.0/guava-21.0.jar:/Users/cheran/.m2/repository/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar:/Users/cheran/.m2/repository/net/md-5/bungeecord-chat/1.16-R0.3/bungeecord-chat-1.16-R0.3.jar:/Users/cheran/.m2/repository/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar:/Users/cheran/.m2/repository/mysql/mysql-connector-java/8.0.19/mysql-connector-java-8.0.19.jar:/Users/cheran/.m2/repository/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar:/Users/cheran/.m2/repository/com/zaxxer/HikariCP/3.4.5/HikariCP-3.4.5.jar:/Users/cheran/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter15925080229959639605.jar"/>
+    <property name="surefire.real.class.path" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter5473623393934094169.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="13.0.1+9"/>
@@ -53,5 +53,5 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="57.0"/>
   </properties>
-  <testcase name="shouldAnswerWithTrue" classname="com.twentyonec.ItemsLogger.AppTest" time="0.001"/>
+  <testcase name="shouldAnswerWithTrue" classname="com.twentyonec.ItemsLogger.AppTest" time="0.002"/>
 </testsuite>
