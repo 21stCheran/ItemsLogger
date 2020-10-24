@@ -24,24 +24,31 @@ public class Config {
 	public boolean getDebug() {
 		return configuration.getBoolean(DEBUG_PATH);
 	}
+
 	public String getUsername() {
 		return configuration.getString(USERNAME_PATH);
 	}
+
 	public String getPassword() {
 		return configuration.getString(PASSWORD_PATH);
 	}
+
 	public String getHostname() {
 		return configuration.getString(HOSTNAME_PATH);
 	}
+
 	public String getPort() {
 		return configuration.getString(PORT_PATH);
 	}
+
 	public String getDatabase() {
 		return configuration.getString(DATABASE_PATH);
 	}
+
 	public boolean getDeath() {
 		return configuration.getBoolean(STORAGE_DEATH);
 	}
+
 	public boolean getRestart() {
 		return configuration.getBoolean(STORAGE_RESTART);
 	}

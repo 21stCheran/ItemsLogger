@@ -14,11 +14,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
 import com.twentyonec.ItemsLogger.utils.Config;
 import com.twentyonec.ItemsLogger.utils.Storage;
+
 /**
  * Plugin main class
  * 
- * @version 	1.0.1 22 October 2020
- * @author 		Cheran (21C)
+ * @version 1.0.1 22 October 2020
+ * @author Cheran (21C)
  */
 public class ItemsLogger extends JavaPlugin {
 
@@ -40,7 +41,7 @@ public class ItemsLogger extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		debugMessage("Attempting to save all player data");
-		for (Player player: Bukkit.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			ItemPlayer itemPlayer = new ItemPlayer(player);
 			itemPlayer.savePlayer();
 		}
@@ -49,6 +50,7 @@ public class ItemsLogger extends JavaPlugin {
 	public static ItemsLogger getPlugin() {
 		return plugin;
 	}
+
 	public Config getConfigManager() {
 		return config;
 	}
@@ -56,5 +58,5 @@ public class ItemsLogger extends JavaPlugin {
 	public void debugMessage(String message) {
 		if (config.getDebug())
 			plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
-	} 
+	}
 }

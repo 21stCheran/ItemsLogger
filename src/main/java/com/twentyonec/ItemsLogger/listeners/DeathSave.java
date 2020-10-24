@@ -16,7 +16,7 @@ public class DeathSave implements Listener {
 	public void onDeathSave(PlayerDeathEvent event) {
 
 		Player player = event.getEntity();
-		String cause = event.getDeathMessage();	
+		String cause = event.getDeathMessage();
 		ItemPlayer itemPlayer = new ItemPlayer(player, cause);
 
 		plugin.debugMessage("Attempting to save player data");
