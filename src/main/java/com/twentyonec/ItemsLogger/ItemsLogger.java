@@ -7,7 +7,11 @@ package com.twentyonec.ItemsLogger;
 
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.twentyonec.ItemsLogger.listeners.DeathSave;
 import com.twentyonec.ItemsLogger.utils.Config;
 import com.twentyonec.ItemsLogger.utils.Storage;
 /**
@@ -29,11 +33,17 @@ public class ItemsLogger extends JavaPlugin {
 		config = new Config(getConfig());
 		storage = Storage.getStorage(this);
 		storage.setUpTable();
+
+		this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
 	}
 
 	@Override
 	public void onDisable() {
-
+		debugMessage("Attempting to save all player data");
+		for (Player player: Bukkit.getOnlinePlayers()) {
+			ItemPlayer itemPlayer = new ItemPlayer(player);
+			itemPlayer.savePlayer();
+		}
 	}
 
 	public static ItemsLogger getPlugin() {
@@ -42,9 +52,12 @@ public class ItemsLogger extends JavaPlugin {
 	public Config getConfigManager() {
 		return config;
 	}
+	public Storage getStorageManager() {
+		return storage;
+	}
 
 	public void debugMessage(String message) {
-		if (getConfigManager().getDebug())
+		if (config.getDebug())
 			plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
 	} 
 }
