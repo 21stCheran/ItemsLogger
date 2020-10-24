@@ -52,9 +52,6 @@ public class ItemsLogger extends JavaPlugin {
 	public Config getConfigManager() {
 		return config;
 	}
-	public Storage getStorageManager() {
-		return storage;
-	}
 
 	public void debugMessage(String message) {
 		if (config.getDebug())
