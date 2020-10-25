@@ -55,6 +55,7 @@ public class Serialize {
 			final ItemStack[] items = new ItemStack[objIn.readInt()];
 
 			for (int i = 0; i < items.length; i++) {
+				@SuppressWarnings("unchecked")
 				final HashMap<String, Object> map = (HashMap<String, Object>) objIn.readObject();
 				items[i] = ItemStack.deserialize(map);
 			}
