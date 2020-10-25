@@ -3,6 +3,7 @@ package com.twentyonec.ItemsLogger.utils;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ public class CommandsUtil {
 			while (rs.next()&&(i<10)) {
 				String cause = rs.getString("cause");
 				Date date = rs.getDate("date");
-				Timestamp time = rs.getTimestamp("time");
+				Time time = rs.getTime("time");
 
 				playerDataArray[i] = new PlayerData(cause, date, time);
 				i++;
@@ -79,9 +80,9 @@ class PlayerData {
 
 	String cause;
 	Date date;
-	Timestamp time;
+	Time time;
 
-	public PlayerData(String cause, Date date, Timestamp time) {
+	public PlayerData(String cause, Date date, Time time) {
 		this.cause = cause;
 		this.date = date;
 		this.time = time;
@@ -89,7 +90,7 @@ class PlayerData {
 	
 	@Override
 	public String toString() {
-		return "Cause: " + cause + " Date: " + date + time;
+		return "Cause: " + cause + " Date: " + date + " " + time;
 	}
 
 }
