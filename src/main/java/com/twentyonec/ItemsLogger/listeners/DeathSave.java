@@ -21,6 +21,7 @@ public class DeathSave implements Listener {
 
 		plugin.debugMessage("Attempting to save player data");
 		itemPlayer.savePlayer();
+		
 	}
 
 }

@@ -2,3 +2,16 @@ main: com.twentyonec.ItemsLogger.ItemsLogger
 name: ItemsLogger
 version: 1.0.1-Snapshot
 author: 21C
+api-version: "1.13"
+
+permissions:
+  itemlogger.log:
+    description: Allows the player to get logged.
+    default: op
+  itemlogger.search:
+     description: Command used to get logged information.
+     default: op
+commands:
+   itemslogger:
+      description: Main command.
+      usage: /itemslogger [player]
