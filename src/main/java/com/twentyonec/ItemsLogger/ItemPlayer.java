@@ -1,7 +1,7 @@
 package com.twentyonec.ItemsLogger;
 
 import java.sql.Date;
-import java.sql.Timestamp;
+import java.sql.Time;
 
 import java.util.UUID;
 
@@ -12,16 +12,16 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 
 public class ItemPlayer {
 
-	ItemsLogger plugin = ItemsLogger.getPlugin();
-	Storage storage = Storage.getStorage(plugin);
+	private ItemsLogger plugin = ItemsLogger.getPlugin();
+	private Storage storage = Storage.getStorage(plugin);
 
-	private final UUID uuid;
-	private final String inv;
-	private final int x, y, z;
-	private final int experience;
-	private final String cause;
-	private final Date date;
-	private final Timestamp time;
+	final UUID uuid;
+	final String inv;
+	final String cause;
+	final int x, y, z;
+	final int experience;
+	public final Date date;
+	public final Time time;
 
 	public ItemPlayer(final Player player, final String cause) {
 		final java.util.Date longDate = new java.util.Date();
@@ -34,7 +34,7 @@ public class ItemPlayer {
 		this.experience = player.getTotalExperience();
 		this.cause = cause;
 		this.date = new Date(longDate.getTime());
-		this.time = new Timestamp(longDate.getTime());
+		this.time = new Time(longDate.getTime());
 
 	}
 
@@ -49,8 +49,23 @@ public class ItemPlayer {
 		this.experience = player.getTotalExperience();
 		this.cause = "Restart";
 		this.date = new Date(longDate.getTime());
-		this.time = new Timestamp(longDate.getTime());
+		this.time = new Time(longDate.getTime());
 
+	}
+	
+	
+
+	public ItemPlayer(UUID uuid, String inv, String cause, int x, int y, int z, int experience, Date date, Time time) {
+		super();
+		this.uuid = uuid;
+		this.inv = inv;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.experience = experience;
+		this.cause = cause;
+		this.date = date;
+		this.time = time;
 	}
 
 	public void savePlayer() {

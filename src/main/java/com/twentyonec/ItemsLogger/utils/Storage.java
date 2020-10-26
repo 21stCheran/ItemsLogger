@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.Time;
+import java.util.UUID;
 
+import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -101,13 +103,13 @@ public class Storage {
 
 	}
 
-	public void update(String sql, Date date, Timestamp time) {
+	public void update(String sql, Date date, Time time) {
 
 		try (Connection connection = this.getConnection()) {
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setDate(1, date);
-			statement.setTimestamp(2, time);
+			statement.setTime(2, time);
 
 			plugin.debugMessage("Preparing statement for update.");
 			statement.executeUpdate();
@@ -153,5 +155,46 @@ public class Storage {
 				+ "date DATE NOT NULL, "
 				+ "time TIME NOT NULL);";
 		this.update(update);
+	}
+
+	private ItemPlayer initializePlayer(ResultSet rs) {
+
+		try {
+			UUID uuid = UUID.fromString(rs.getString("uuid"));
+			String inv = rs.getString("inventory");
+			String cause = rs.getString("cause");
+			int x = rs.getInt("loc_x");
+			int y = rs.getInt("loc_y");
+			int z = rs.getInt("loc_z");
+			int experience = rs.getInt("experience");
+			Date date = rs.getDate("date");
+			Time time = rs.getTime("time");
+
+			return new ItemPlayer(uuid, inv, cause, x, y, z, experience, date, time);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public ItemPlayer[] retrieveList(UUID uuid) {
+
+		String sql = " SELECT * FROM itemslogger WHERE uuid = '"
+				+ uuid
+				+ "' ORDER BY date DESC, time DESC";
+		ResultSet rs = storage.query(sql);
+
+		ItemPlayer[] playerDataArray = new ItemPlayer[10];
+		try {
+			int i = 0;
+			while (rs.next()&&(i<10)) {
+				playerDataArray[i] = initializePlayer(rs);
+				i++;
+			}
+			return playerDataArray;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
