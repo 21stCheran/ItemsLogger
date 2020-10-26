@@ -1,14 +1,14 @@
-package com.twentyonec.ItemsLogger.utils;
+package com.twentyonec.ItemsLogger.commands;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
+import com.twentyonec.ItemsLogger.utils.Storage;
 
 public class CommandsUtil {
 
@@ -62,15 +62,15 @@ public class CommandsUtil {
 		}
 	}
 
-	public String[] retrieveList(Date date) {
+	public PlayerData[] retrieveList(Date date) {
 		return null;
 	}
 
-	public String[] retrieveList(String cause) {
+	public PlayerData[] retrieveList(String cause) {
 		return null;
 	}
 
-	public String[] retrieveList(Date date, String cause) {
+	public PlayerData[] retrieveList(Date date, String cause) {
 		return null;
 	}
 
