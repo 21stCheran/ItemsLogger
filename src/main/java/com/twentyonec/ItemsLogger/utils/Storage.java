@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
@@ -146,7 +148,7 @@ public class Storage {
 		plugin.debugMessage("Attempting to set up tables if they do not exist.");
 		final String update = "CREATE TABLE IF NOT EXISTS itemslogger("
 				+ "uuid VARCHAR(36) NOT NULL, "
-				+ "inventory VARCHAR(21000), "
+				+ "inventory BLOB(21000), "
 				+ "cause VARCHAR(255) NOT NULL, "
 				+ "loc_x REAL NOT NULL, "
 				+ "loc_y REAL NOT NULL, "
@@ -177,21 +179,29 @@ public class Storage {
 		}
 	}
 
-	public ItemPlayer[] retrieveList(UUID uuid) {
+	public ItemPlayer[] retrieveList(UUID uuid, String date, String cause) {
 
-		String sql = " SELECT * FROM itemslogger WHERE uuid = '"
-				+ uuid
-				+ "' ORDER BY date DESC, time DESC";
+		String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
+
+		if (cause != null) {
+			sql += " AND cause = '" + cause + "'";
+		}
+
+		if (date != null) {
+			sql += " AND date = '" + date + "'";
+		}
+
+		sql += " ORDER BY date DESC, time DESC";
 		ResultSet rs = storage.query(sql);
 
-		ItemPlayer[] playerDataArray = new ItemPlayer[10];
 		try {
+		List<ItemPlayer>playerDataArray = new ArrayList();
 			int i = 0;
 			while (rs.next()&&(i<10)) {
-				playerDataArray[i] = initializePlayer(rs);
+				playerDataArray.add(initializePlayer(rs));
 				i++;
 			}
-			return playerDataArray;
+			return playerDataArray.toArray(new ItemPlayer[0]);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
