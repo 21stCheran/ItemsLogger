@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="CA"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-13.0.1.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter10285360922782578375.jar /Users/cheran/eclipse-workspace/ItemsLogger/target/surefire 2020-10-26T16-51-29_567-jvmRun1 surefire13048341339022041426tmp surefire_016762468195305536890tmp"/>
+    <property name="sun.java.command" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter3794657809589765561.jar /Users/cheran/eclipse-workspace/ItemsLogger/target/surefire 2020-10-26T19-36-54_063-jvmRun1 surefire14259356190826034619tmp surefire_05156796492579424960tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/test-classes:/Users/cheran/eclipse-workspace/ItemsLogger/target/classes:/Users/cheran/.m2/repository/junit/junit/4.11/junit-4.11.jar:/Users/cheran/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/cheran/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/Users/cheran/.m2/repository/org/spigotmc/spigot-api/1.16.3-R0.1-SNAPSHOT/spigot-api-1.16.3-R0.1-SNAPSHOT.jar:/Users/cheran/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/Users/cheran/.m2/repository/com/google/guava/guava/21.0/guava-21.0.jar:/Users/cheran/.m2/repository/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar:/Users/cheran/.m2/repository/net/md-5/bungeecord-chat/1.16-R0.3/bungeecord-chat-1.16-R0.3.jar:/Users/cheran/.m2/repository/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar:/Users/cheran/.m2/repository/mysql/mysql-connector-java/8.0.19/mysql-connector-java-8.0.19.jar:/Users/cheran/.m2/repository/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar:/Users/cheran/.m2/repository/com/zaxxer/HikariCP/3.4.5/HikariCP-3.4.5.jar:/Users/cheran/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter10285360922782578375.jar"/>
+    <property name="surefire.real.class.path" value="/Users/cheran/eclipse-workspace/ItemsLogger/target/surefire/surefirebooter3794657809589765561.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="13.0.1+9"/>
