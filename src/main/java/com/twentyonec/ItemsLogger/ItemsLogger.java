@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.twentyonec.ItemsLogger.commands.Commands;
+import com.twentyonec.ItemsLogger.commands.OpenItemLog;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
 import com.twentyonec.ItemsLogger.utils.Config;
 import com.twentyonec.ItemsLogger.utils.Storage;
@@ -38,6 +39,7 @@ public class ItemsLogger extends JavaPlugin {
 
 		this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
 		this.getCommand("itemslogger").setExecutor(new Commands());
+		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
 	}
 
 	@Override

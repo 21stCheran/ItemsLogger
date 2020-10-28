@@ -16,10 +16,10 @@ public class ItemPlayer {
 	private Storage storage = Storage.getStorage(plugin);
 
 	final UUID uuid;
-	final String inv;
-	final String cause;
-	final int x, y, z;
-	final int experience;
+	public final String inv;
+	public final String cause;
+	public final int x, y, z;
+	public final int experience;
 	public final Date date;
 	public final Time time;
 

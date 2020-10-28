@@ -148,7 +148,7 @@ public class Storage {
 		plugin.debugMessage("Attempting to set up tables if they do not exist.");
 		final String update = "CREATE TABLE IF NOT EXISTS itemslogger("
 				+ "uuid VARCHAR(36) NOT NULL, "
-				+ "inventory BLOB(21000), "
+				+ "inventory VARCHAR(12000), "
 				+ "cause VARCHAR(255) NOT NULL, "
 				+ "loc_x REAL NOT NULL, "
 				+ "loc_y REAL NOT NULL, "
@@ -211,5 +211,22 @@ public class Storage {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public ItemPlayer retrieveItemPlayer(UUID uuid, String date, String time) {
+
+		String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"
+				+ "AND date = '" + date + "' AND time = '" + time + "'";
+
+		ResultSet rs = storage.query(sql);
+
+		try {
+			while (rs.next()) {
+				return initializePlayer(rs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
