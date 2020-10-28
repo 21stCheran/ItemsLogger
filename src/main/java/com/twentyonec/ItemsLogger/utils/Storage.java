@@ -179,8 +179,11 @@ public class Storage {
 		}
 	}
 
-	public ItemPlayer[] retrieveList(UUID uuid, String date, String cause) {
+	public ItemPlayer[] retrieveList(UUID uuid, String date, String cause, Integer index) {
 
+		index = (index == null)? 1: index;
+		int max = index * 10;
+		int min = max - 10;
 		String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
 
 		if (cause != null) {
@@ -195,10 +198,12 @@ public class Storage {
 		ResultSet rs = storage.query(sql);
 
 		try {
-		List<ItemPlayer>playerDataArray = new ArrayList();
+			List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
 			int i = 0;
-			while (rs.next()&&(i<10)) {
-				playerDataArray.add(initializePlayer(rs));
+			while (rs.next()) {
+				if ((i<max) && (i >= min)) {
+					playerDataArray.add(initializePlayer(rs));
+				}
 				i++;
 			}
 			return playerDataArray.toArray(new ItemPlayer[0]);

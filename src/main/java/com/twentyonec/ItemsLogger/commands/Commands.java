@@ -32,18 +32,20 @@ public class Commands implements CommandExecutor {
 			return false;
 		}
 
-		String date = "2020-10-26;
+		String date = null;
 		String cause = null;
 		Integer index = null;
 
 		if (args.length == 1) {
 
-			ItemPlayer[] playerlist = storage.retrieveList(target.getUniqueId(), date, cause);
+			ItemPlayer[] playerlist = storage.retrieveList(target.getUniqueId(), date, cause, index);
 			TextComponent[] components = ChatHandler.sendData(playerlist, date, cause);
 
 			sender.spigot().sendMessage(components);
 
 		}
+
+
 
 		return true;
 	}
