@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.twentyonec.ItemsLogger.utils.Serialize;
 import com.twentyonec.ItemsLogger.utils.Storage;
@@ -72,13 +73,19 @@ public class ItemPlayer {
 	}
 
 	public void savePlayer() {
+		
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				final String sql = "INSERT INTO itemslogger"
+						+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
+						+ "VALUES ('" + uuid + "','" + inv + "','" 
+						+ cause + "'," + x + "," + y + "," + z + "," 
+						+ experience + ",?" + ",?" + ");";
+				storage.update(sql, date, time);
+			}
+		}.runTaskAsynchronously(plugin);
 
-		final String sql = "INSERT INTO itemslogger"
-				+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
-				+ "VALUES ('" + uuid + "','" + inv + "','" 
-				+ cause + "'," + x + "," + y + "," + z + "," 
-				+ experience + ",?" + ",?" + ");";
-		storage.update(sql, date, time);
 
 	}
 

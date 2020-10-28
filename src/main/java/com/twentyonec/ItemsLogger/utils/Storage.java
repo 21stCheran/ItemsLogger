@@ -9,6 +9,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
@@ -178,55 +180,82 @@ public class Storage {
 			return null;
 		}
 	}
+	
+	public CompletableFuture<ItemPlayer[]> retrieveListAsync(UUID uuid, String date, String cause, int max, int min) {
+		
+		return CompletableFuture.supplyAsync(() -> {
+			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
+
+			if (cause != null) {
+				sql += " AND cause = '" + cause + "'";
+			}
+
+			if (date != null) {
+				sql += " AND date = '" + date + "'";
+			}
+
+			sql += " ORDER BY date DESC, time DESC";
+			ResultSet rs = storage.query(sql);
+
+			try {
+				List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
+				int i = 0;
+				while (rs.next()) {
+					if ((i<max) && (i >= min)) {
+						playerDataArray.add(initializePlayer(rs));
+					}
+					i++;
+				}
+				return playerDataArray.toArray(new ItemPlayer[0]);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
+		
+	}
 
 	public ItemPlayer[] retrieveList(UUID uuid, String date, String cause, Integer index) {
 
 		index = (index == null)? 1: index;
 		int max = index * 10;
 		int min = max - 10;
-		String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
-
-		if (cause != null) {
-			sql += " AND cause = '" + cause + "'";
-		}
-
-		if (date != null) {
-			sql += " AND date = '" + date + "'";
-		}
-
-		sql += " ORDER BY date DESC, time DESC";
-		ResultSet rs = storage.query(sql);
-
+		
 		try {
-			List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
-			int i = 0;
-			while (rs.next()) {
-				if ((i<max) && (i >= min)) {
-					playerDataArray.add(initializePlayer(rs));
-				}
-				i++;
-			}
-			return playerDataArray.toArray(new ItemPlayer[0]);
-		} catch (SQLException e) {
+			return retrieveListAsync(uuid, date, cause, max, min).get();
+		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 			return null;
 		}
+		
+	}
+	
+	public CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
+		
+		return CompletableFuture.supplyAsync(() -> {
+			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"
+					+ "AND date = '" + date + "' AND time = '" + time + "'";
+
+			ResultSet rs = storage.query(sql);
+
+			try {
+				while (rs.next()) {
+					return initializePlayer(rs);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 
 	public ItemPlayer retrieveItemPlayer(UUID uuid, String date, String time) {
 
-		String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"
-				+ "AND date = '" + date + "' AND time = '" + time + "'";
-
-		ResultSet rs = storage.query(sql);
-
 		try {
-			while (rs.next()) {
-				return initializePlayer(rs);
-			}
-		} catch (SQLException e) {
+			return retrieveItemPlayerAsync(uuid, date, time).get();
+		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 }
