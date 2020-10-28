@@ -5,7 +5,10 @@ import java.sql.Time;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.twentyonec.ItemsLogger.utils.Serialize;
 import com.twentyonec.ItemsLogger.utils.Storage;
@@ -79,12 +82,14 @@ public class ItemPlayer {
 
 	}
 
-	public void loadPlayer() {
-		// TODO
-	}
-
-	public void serialize() {
-
+	public void loadInventory(Player sender) {
+		ItemStack[] items = Serialize.itemDeserialize(this.inv);
+		
+		final Inventory inv = Bukkit.createInventory(null, 54, 
+				sender.getDisplayName() 
+				+ " Death Inventory");
+		inv.addItem(items);
+		sender.openInventory(inv);
 	}
 
 }

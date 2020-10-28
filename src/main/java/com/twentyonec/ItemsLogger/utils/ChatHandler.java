@@ -54,7 +54,8 @@ public class ChatHandler {
 		for (int i = 1; i < components.length; i++) {
 
 			components[i].setClickEvent(new ClickEvent (ClickEvent.Action.RUN_COMMAND,
-					"/plugins"));
+					"/openitemlog " + name + " open " 
+							+ itemPlayer.date.toString() + " " + itemPlayer.time.toString()));
 			components[i].setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, 
 					new Text( "§cClick to open inventory" ) ) );
 		}

@@ -16,7 +16,7 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class OpenItemLog implements CommandExecutor {
-	
+
 	ItemsLogger plugin = ItemsLogger.getPlugin();
 	Storage storage = Storage.getStorage(plugin);
 
@@ -55,16 +55,22 @@ public class OpenItemLog implements CommandExecutor {
 			}
 
 		}
-		
+
 		if ((date == null) || (time == null) || (type == null))
 			return false;
-		
-		
+
+
 		ItemPlayer itemPlayer = storage.retrieveItemPlayer(target.getUniqueId(), date, time);
-		TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getDisplayName());
-		
-		sender.spigot().sendMessage(components);
-		
+
+		if (type.equalsIgnoreCase("view")) {
+
+			TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getDisplayName());
+			sender.spigot().sendMessage(components);
+
+		} else {
+
+			itemPlayer.loadInventory((Player) sender);;
+		}
 		return true;
 	}
 
