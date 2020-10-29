@@ -22,7 +22,7 @@ public class Serialize {
 				.stream()
 				.filter(stack -> stack != null)
 				.collect(Collectors.toList());
-		
+
 		final ItemStack[] items = itemlist.toArray(new ItemStack[0]);
 
 		try {
@@ -37,10 +37,10 @@ public class Serialize {
 
 			objOut.close();
 			final String data = Base64Coder.encodeLines(out.toByteArray());
-			
+
 			return data;
 		} catch (final IOException e) {
-			
+
 			e.printStackTrace();
 			return null;
 		}
@@ -61,7 +61,7 @@ public class Serialize {
 			}
 
 			objIn.close();
-			
+
 			return items;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();

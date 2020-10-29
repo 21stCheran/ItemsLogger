@@ -56,8 +56,8 @@ public class ItemPlayer {
 		this.time = new Time(longDate.getTime());
 
 	}
-	
-	
+
+
 
 	public ItemPlayer(UUID uuid, String inv, String cause, int x, int y, int z, int experience, Date date, Time time) {
 		super();
@@ -73,7 +73,7 @@ public class ItemPlayer {
 	}
 
 	public void savePlayer() {
-		
+
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -91,7 +91,7 @@ public class ItemPlayer {
 
 	public void loadInventory(Player sender) {
 		ItemStack[] items = Serialize.itemDeserialize(this.inv);
-		
+
 		final Inventory inv = Bukkit.createInventory(null, 54, 
 				sender.getDisplayName() 
 				+ " Death Inventory");
