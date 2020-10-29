@@ -56,17 +56,10 @@ public class Commands implements CommandExecutor {
 
 		}
 
-		plugin.debugMessage("Values: " + date + cause + index);
-
-
 		String name = target.getDisplayName();
 		final ItemPlayer[] playerlist = storage.retrieveList(target.getUniqueId(), date, cause, index);
 		final TextComponent[] components = ChatHandler.sendLogData(playerlist, name, date, cause, index);
-
 		sender.spigot().sendMessage(components);
-
-
-
 
 		return true;
 	}

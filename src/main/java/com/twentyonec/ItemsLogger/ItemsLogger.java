@@ -44,7 +44,7 @@ public class ItemsLogger extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		debugMessage("Attempting to save all player data");
+		debugMessage("Attempting to log all player data");
 		for (final Player player : Bukkit.getOnlinePlayers()) {
 			final ItemPlayer itemPlayer = new ItemPlayer(player);
 			itemPlayer.savePlayer();

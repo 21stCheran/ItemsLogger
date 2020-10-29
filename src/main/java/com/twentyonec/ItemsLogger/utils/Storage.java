@@ -180,9 +180,9 @@ public class Storage {
 			return null;
 		}
 	}
-	
+
 	public CompletableFuture<ItemPlayer[]> retrieveListAsync(UUID uuid, String date, String cause, int max, int min) {
-		
+
 		return CompletableFuture.supplyAsync(() -> {
 			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
 
@@ -212,7 +212,7 @@ public class Storage {
 				return null;
 			}
 		});
-		
+
 	}
 
 	public ItemPlayer[] retrieveList(UUID uuid, String date, String cause, Integer index) {
@@ -220,18 +220,18 @@ public class Storage {
 		index = (index == null)? 1: index;
 		int max = index * 10;
 		int min = max - 10;
-		
+
 		try {
 			return retrieveListAsync(uuid, date, cause, max, min).get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 	public CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
-		
+
 		return CompletableFuture.supplyAsync(() -> {
 			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"
 					+ "AND date = '" + date + "' AND time = '" + time + "'";
