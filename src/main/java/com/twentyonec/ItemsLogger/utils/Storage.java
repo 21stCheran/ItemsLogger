@@ -19,8 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class Storage {
 
-	private static Storage storage = null;
-
+	private static Storage storage;
 	private ItemsLogger plugin = ItemsLogger.getPlugin();
 
 	private String hostname;
@@ -39,13 +38,12 @@ public class Storage {
 		this.username = username;
 		this.password = password;
 		this.database = database;
-
 	}
 
 	public static synchronized Storage getStorage(ItemsLogger plugin) {
-		final Config config = plugin.getConfigManager();
-
+		
 		if (storage == null) {
+			final Config config = plugin.getConfigManager();
 			storage = new Storage(config.getHostname(), config.getPort(), config.getUsername(),
 					config.getPassword(), config.getDatabase());
 		}
@@ -86,7 +84,7 @@ public class Storage {
 
 	}
 
-	public Connection getConnection() throws SQLException {
+	private Connection getConnection() throws SQLException {
 		return this.dataSource.getConnection();
 	}
 
@@ -148,7 +146,7 @@ public class Storage {
 		this.connect();
 
 		plugin.debugMessage("Attempting to set up tables if they do not exist.");
-		final String update = "CREATE TABLE IF NOT EXISTS itemslogger("
+		final String createTableQuery = "CREATE TABLE IF NOT EXISTS itemslogger("
 				+ "uuid VARCHAR(36) NOT NULL, "
 				+ "inventory VARCHAR(12000), "
 				+ "cause VARCHAR(255) NOT NULL, "
@@ -158,7 +156,7 @@ public class Storage {
 				+ "experience REAL NOT NULL, "
 				+ "date DATE NOT NULL, "
 				+ "time TIME NOT NULL);";
-		this.update(update);
+		this.update(createTableQuery);
 	}
 
 	private ItemPlayer initializePlayer(ResultSet rs) {
@@ -181,7 +179,7 @@ public class Storage {
 		}
 	}
 
-	public CompletableFuture<ItemPlayer[]> retrieveListAsync(UUID uuid, String date, String cause, int max, int min) {
+	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(UUID uuid, String date, String cause, int max, int min) {
 
 		return CompletableFuture.supplyAsync(() -> {
 			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
@@ -215,14 +213,13 @@ public class Storage {
 
 	}
 
-	public ItemPlayer[] retrieveList(UUID uuid, String date, String cause, Integer index) {
+	public ItemPlayer[] retrieveLogList(UUID uuid, String date, String cause, int index) {
 
-		index = (index == null)? 1: index;
 		int max = index * 10;
 		int min = max - 10;
 
 		try {
-			return retrieveListAsync(uuid, date, cause, max, min).get();
+			return retrieveLogListAsync(uuid, date, cause, max, min).get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 			return null;
@@ -230,7 +227,7 @@ public class Storage {
 
 	}
 
-	public CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
+	private CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
 
 		return CompletableFuture.supplyAsync(() -> {
 			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"

@@ -10,7 +10,7 @@ import com.twentyonec.ItemsLogger.ItemsLogger;
 
 public class DeathSave implements Listener {
 
-	ItemsLogger plugin = ItemsLogger.getPlugin();
+	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 
 	@EventHandler
 	public void onDeathSave(final PlayerDeathEvent event) {

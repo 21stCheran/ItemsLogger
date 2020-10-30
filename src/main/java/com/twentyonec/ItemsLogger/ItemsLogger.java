@@ -11,8 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.twentyonec.ItemsLogger.commands.Commands;
 import com.twentyonec.ItemsLogger.commands.OpenItemLog;
+import com.twentyonec.ItemsLogger.commands.ViewLogList;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
 import com.twentyonec.ItemsLogger.utils.Config;
 import com.twentyonec.ItemsLogger.utils.Storage;
@@ -25,20 +25,20 @@ import com.twentyonec.ItemsLogger.utils.Storage;
  */
 public class ItemsLogger extends JavaPlugin {
 
-	static ItemsLogger plugin = null;
-	Config config = null;
-	Storage storage = null;
+	private static ItemsLogger plugin = null;
+	private Config config = null;
+	private Storage storage = null;
 
 	@Override
 	public void onEnable() {
-		plugin = this;
-		saveDefaultConfig();
-		config = new Config(getConfig());
-		storage = Storage.getStorage(this);
-		storage.setUpTable();
+		ItemsLogger.plugin = this;
+		this.saveDefaultConfig();
+		this.config = new Config(getConfig());
+		this.storage = Storage.getStorage(this);
+		this.storage.setUpTable();
 
 		this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
-		this.getCommand("itemslogger").setExecutor(new Commands());
+		this.getCommand("itemslogger").setExecutor(new ViewLogList());
 		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
 	}
 
@@ -46,7 +46,7 @@ public class ItemsLogger extends JavaPlugin {
 	public void onDisable() {
 		debugMessage("Attempting to log all player data");
 		for (final Player player : Bukkit.getOnlinePlayers()) {
-			final ItemPlayer itemPlayer = new ItemPlayer(player);
+			final ItemPlayer itemPlayer = new ItemPlayer(player, "Restart");
 			itemPlayer.savePlayer();
 		}
 	}

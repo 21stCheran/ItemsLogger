@@ -16,16 +16,16 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 
 public class ItemPlayer {
 
-	private ItemsLogger plugin = ItemsLogger.getPlugin();
-	private Storage storage = Storage.getStorage(plugin);
+	private final ItemsLogger plugin = ItemsLogger.getPlugin();
+	private final Storage storage = Storage.getStorage(plugin);
 
-	final UUID uuid;
-	public final String inv;
-	public final String cause;
-	public final int x, y, z;
-	public final int experience;
-	public final Date date;
-	public final Time time;
+	private UUID uuid;
+	private String inv;
+	private String cause;
+	private int x, y, z;
+	private int experience;
+	private Date date;
+	private Time time;
 
 	public ItemPlayer(final Player player, final String cause) {
 		final java.util.Date longDate = new java.util.Date();
@@ -42,25 +42,7 @@ public class ItemPlayer {
 
 	}
 
-	public ItemPlayer(final Player player) {
-		final java.util.Date longDate = new java.util.Date();
-
-		this.uuid = player.getUniqueId();
-		this.inv = Serialize.itemSerialize(player.getInventory().getContents());
-		this.x = player.getLocation().getBlockX();
-		this.y = player.getLocation().getBlockY();
-		this.z = player.getLocation().getBlockZ();
-		this.experience = player.getTotalExperience();
-		this.cause = "Restart";
-		this.date = new Date(longDate.getTime());
-		this.time = new Time(longDate.getTime());
-
-	}
-
-
-
-	public ItemPlayer(UUID uuid, String inv, String cause, int x, int y, int z, int experience, Date date, Time time) {
-		super();
+	public ItemPlayer(final UUID uuid, final String inv, final String cause, final int x, final int y, final int z, final int experience, final Date date, final Time time) {
 		this.uuid = uuid;
 		this.inv = inv;
 		this.x = x;
@@ -89,14 +71,32 @@ public class ItemPlayer {
 
 	}
 
-	public void loadInventory(Player sender) {
-		ItemStack[] items = Serialize.itemDeserialize(this.inv);
+	public void loadInventory(final Player sender) {
 
+		final ItemStack[] items = Serialize.itemDeserialize(this.inv);
 		final Inventory inv = Bukkit.createInventory(null, 54, 
 				sender.getDisplayName() 
 				+ " Death Inventory");
 		inv.addItem(items);
 		sender.openInventory(inv);
 	}
+
+	//getters
+	public String getInventory() {
+		return this.inv;
+	}
+	public String getCause() {
+		return this.cause;
+	}
+	public String getLocation() {
+		return this.x + ", " + this.y + ", " + this.z;
+	}
+	public String getDate() {
+		return this.date.toString() + " " + this.time.toString();
+	}
+	public int getExperience() {
+		return this.experience;
+	}
+
 
 }
