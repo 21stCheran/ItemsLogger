@@ -19,6 +19,8 @@ commands:
    itemslogger:
      description: Displays list of logs
      usage: /itemslogger [player] <date> <cause> <index>
+     permission: itemslogger.search
    openitemlog:
      description: Diplays log info
-     usage: /openitemslog [player] [view|open] [date] [time] 
+     usage: /openitemslog [player] [view|open] [date] [time]
+     permission: itemslogger.view
