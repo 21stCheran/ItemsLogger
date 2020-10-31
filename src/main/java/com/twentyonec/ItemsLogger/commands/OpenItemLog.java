@@ -60,7 +60,7 @@ public class OpenItemLog implements CommandExecutor {
 		ItemPlayer itemPlayer = storage.retrieveItemPlayer(target.getUniqueId(), date, time);
 		if (type.equalsIgnoreCase("view")) {
 
-			TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getDisplayName());
+			TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getName());
 			sender.spigot().sendMessage(components);
 
 		} else {

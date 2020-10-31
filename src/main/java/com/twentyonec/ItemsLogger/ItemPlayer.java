@@ -1,5 +1,6 @@
 package com.twentyonec.ItemsLogger;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
@@ -30,7 +31,7 @@ public class ItemPlayer {
 		final java.util.Date longDate = new java.util.Date();
 
 		this.uuid = player.getUniqueId();
-		this.inv = Serialize.itemSerialize(player.getInventory().getContents());
+		this.inv = Serialize.itemStackArrayToBase64(player.getInventory().getContents());
 		this.x = player.getLocation().getBlockX();
 		this.y = player.getLocation().getBlockY();
 		this.z = player.getLocation().getBlockZ();
@@ -67,12 +68,15 @@ public class ItemPlayer {
 
 	public void loadInventory(final Player sender) {
 
-		final ItemStack[] items = Serialize.itemDeserialize(this.inv);
-		final Inventory inv = Bukkit.createInventory(null, 54, 
-				sender.getDisplayName() 
-				+ " Death Inventory");
-		inv.addItem(items);
-		sender.openInventory(inv);
+		ItemStack[] items;
+		try {
+			items = Serialize.itemStackArrayFromBase64(this.inv);
+			final Inventory inv = Bukkit.createInventory(null, 54, "Death Inventory");
+			inv.addItem(items);
+			sender.openInventory(inv);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//getters

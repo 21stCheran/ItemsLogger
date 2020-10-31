@@ -148,7 +148,7 @@ public class Storage {
 		plugin.debugMessage("Attempting to set up tables if they do not exist.");
 		final String createTableQuery = "CREATE TABLE IF NOT EXISTS itemslogger("
 				+ "uuid VARCHAR(36) NOT NULL, "
-				+ "inventory VARCHAR(12000), "
+				+ "inventory TEXT NOT NULL, "
 				+ "cause VARCHAR(255) NOT NULL, "
 				+ "loc_x REAL NOT NULL, "
 				+ "loc_y REAL NOT NULL, "
