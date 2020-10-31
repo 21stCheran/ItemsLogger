@@ -42,9 +42,9 @@ public class OpenItemLog implements CommandExecutor {
 		String type = null;
 
 		for (int i = 1; i < args.length; i++) {
-			if (Regex.matchDate(args[1])) {
+			if (Regex.matchDate(args[i])) {
 				date = args[i];
-			} else if (Regex.matchTime(args[1])) {
+			} else if (Regex.matchTime(args[i])) {
 				time = args[i];
 			} else {
 				type = args[i];
@@ -60,7 +60,7 @@ public class OpenItemLog implements CommandExecutor {
 		ItemPlayer itemPlayer = storage.retrieveItemPlayer(target.getUniqueId(), date, time);
 		if (type.equalsIgnoreCase("view")) {
 
-			TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getDisplayName());
+			TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getName());
 			sender.spigot().sendMessage(components);
 
 		} else {

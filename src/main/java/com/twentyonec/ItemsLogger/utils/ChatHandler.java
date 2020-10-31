@@ -33,7 +33,7 @@ public class ChatHandler {
 			messageBuild.append("\n§9Date: §7");
 			messageBuild.append(playerlist[i].getDate());
 
-			final TextComponent message = new TextComponent(stringBuild.toString());
+			final TextComponent message = new TextComponent(messageBuild.toString());
 
 			commandBuild.append("/openitemlog ");
 			commandBuild.append(name + " ");
