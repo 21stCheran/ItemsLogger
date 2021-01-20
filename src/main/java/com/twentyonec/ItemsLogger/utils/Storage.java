@@ -20,13 +20,13 @@ import com.zaxxer.hikari.HikariDataSource;
 public class Storage {
 
 	private static Storage storage;
-	private ItemsLogger plugin = ItemsLogger.getPlugin();
+	private final ItemsLogger plugin = ItemsLogger.getPlugin();
 
-	private String hostname;
-	private String port;
-	private String username;
-	private String password;
-	private String database;
+	private final String hostname;
+	private final String port;
+	private final String username;
+	private final String password;
+	private final String database;
 
 	private HikariDataSource dataSource;
 
@@ -40,7 +40,7 @@ public class Storage {
 		this.database = database;
 	}
 
-	public static synchronized Storage getStorage(ItemsLogger plugin) {
+	public static synchronized Storage getStorage(final ItemsLogger plugin) {
 
 		if (storage == null) {
 			final Config config = plugin.getConfigManager();
@@ -55,7 +55,7 @@ public class Storage {
 
 		final String jdbcUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;
 
-		HikariConfig config = new HikariConfig();
+		final HikariConfig config = new HikariConfig();
 
 		config.setPoolName("itemslogger");
 		config.setJdbcUrl(jdbcUrl);
@@ -78,7 +78,7 @@ public class Storage {
 
 		try {
 			this.dataSource = new HikariDataSource(config);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -101,7 +101,7 @@ public class Storage {
 			statement.executeUpdate();
 			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			plugin.debugMessage("Error while attempting to execute statement update. (" + sql + ")");
 			e.printStackTrace();
 		}
@@ -112,18 +112,18 @@ public class Storage {
 
 		try (Connection connection = this.getConnection()){
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			final PreparedStatement statement = connection.prepareStatement(sql);
 
 			plugin.debugMessage("Preparing statement for query.");
 			for (int i = 1; i <= args.length; i++) {
 				statement.setObject(i, args[i-1]);
 			}
 
-			ResultSet resultSet = statement.executeQuery();
+			final ResultSet resultSet = statement.executeQuery();
 			plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
 
 			return resultSet;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
 			e.printStackTrace();
 			return null;
@@ -147,27 +147,27 @@ public class Storage {
 		this.update(createTableQuery);
 	}
 
-	private ItemPlayer initializePlayer(ResultSet rs) {
+	private ItemPlayer initializePlayer(final ResultSet rs) {
 
 		try {
-			UUID uuid = UUID.fromString(rs.getString("uuid"));
-			String inv = rs.getString("inventory");
-			String cause = rs.getString("cause");
-			int x = rs.getInt("loc_x");
-			int y = rs.getInt("loc_y");
-			int z = rs.getInt("loc_z");
-			int experience = rs.getInt("experience");
-			Date date = rs.getDate("date");
-			Time time = rs.getTime("time");
+			final UUID uuid = UUID.fromString(rs.getString("uuid"));
+			final String inv = rs.getString("inventory");
+			final String cause = rs.getString("cause");
+			final int x = rs.getInt("loc_x");
+			final int y = rs.getInt("loc_y");
+			final int z = rs.getInt("loc_z");
+			final int experience = rs.getInt("experience");
+			final Date date = rs.getDate("date");
+			final Time time = rs.getTime("time");
 
 			return new ItemPlayer(uuid, inv, cause, x, y, z, experience, date, time);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(UUID uuid, String date, String cause, int max, int min) {
+	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(final UUID uuid, final String date, final String cause, final int max, final int min) {
 
 		return CompletableFuture.supplyAsync(() -> {
 			String sql = " SELECT * FROM itemslogger WHERE uuid = ?";
@@ -192,7 +192,7 @@ public class Storage {
 			}
 
 			try {
-				List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
+				final List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
 				int i = 0;
 				while (rs.next()) {
 					if ((i<max) && (i >= min)) {
@@ -201,7 +201,7 @@ public class Storage {
 					i++;
 				}
 				return playerDataArray.toArray(new ItemPlayer[0]);
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -209,10 +209,10 @@ public class Storage {
 
 	}
 
-	public ItemPlayer[] retrieveLogList(UUID uuid, String date, String cause, int index) {
+	public ItemPlayer[] retrieveLogList(final UUID uuid, final String date, final String cause, final int index) {
 
-		int max = index * 10;
-		int min = max - 10;
+		final int max = index * 10;
+		final int min = max - 10;
 
 		try {
 			return retrieveLogListAsync(uuid, date, cause, max, min).get();
@@ -223,26 +223,26 @@ public class Storage {
 
 	}
 
-	private CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
+	private CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(final UUID uuid, final String date, final String time) {
 
 		return CompletableFuture.supplyAsync(() -> {
-			String sql = " SELECT * FROM itemslogger WHERE uuid = ?"
+			final String sql = " SELECT * FROM itemslogger WHERE uuid = ?"
 					+ " AND date = ? AND time = ?";
 
-			ResultSet rs = storage.query(sql, uuid.toString(), date, time);
+			final ResultSet rs = storage.query(sql, uuid.toString(), date, time);
 
 			try {
 				while (rs.next()) {
 					return initializePlayer(rs);
 				}
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				e.printStackTrace();
 			}
 			return null;
 		});
 	}
 
-	public ItemPlayer retrieveItemPlayer(UUID uuid, String date, String time) {
+	public ItemPlayer retrieveItemPlayer(final UUID uuid, final String date, final String time) {
 
 		try {
 			return retrieveItemPlayerAsync(uuid, date, time).get();
@@ -251,9 +251,10 @@ public class Storage {
 			return null;
 		}
 	}
-	
-	public void deleteLogs(int days) {
-		String sql = "DELETE FROM itemslogger WHERE date < DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+
+	public void deleteLogs(final int days) {
+		plugin.debugMessage("Attempting to delete logs older than " + days + " days.");
+		final String sql = "DELETE FROM itemslogger WHERE date < DATE_SUB(CURDATE(), INTERVAL ? DAY)";
 		this.update(sql, days);
 	}
 }

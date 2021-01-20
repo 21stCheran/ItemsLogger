@@ -3,23 +3,22 @@ package com.twentyonec.ItemsLogger.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 
-public class DeathSave implements Listener {
+public class JoinSave implements Listener {
 
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 
 	@EventHandler
-	public void onDeathSave(final PlayerDeathEvent event) {
+	public void onDeathSave(final PlayerJoinEvent event) {
 
-		final Player player = event.getEntity();
+		final Player player = event.getPlayer();
 		if (player.hasPermission("itemslogger.log")) {
-			final String cause = event.getDeathMessage();
-			final ItemPlayer itemPlayer = new ItemPlayer(player, cause);
+			final ItemPlayer itemPlayer = new ItemPlayer(player, "Join");
 
 			new BukkitRunnable() {
 				@Override
@@ -29,4 +28,5 @@ public class DeathSave implements Listener {
 			}.runTaskAsynchronously(plugin);
 		}
 	}
+
 }

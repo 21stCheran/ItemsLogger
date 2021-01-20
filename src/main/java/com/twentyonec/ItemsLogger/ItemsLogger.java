@@ -14,6 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.twentyonec.ItemsLogger.commands.OpenItemLog;
 import com.twentyonec.ItemsLogger.commands.ViewLogList;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
+import com.twentyonec.ItemsLogger.listeners.JoinSave;
+import com.twentyonec.ItemsLogger.listeners.QuitSave;
 import com.twentyonec.ItemsLogger.utils.Config;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
@@ -36,20 +38,19 @@ public class ItemsLogger extends JavaPlugin {
 		this.config = new Config(getConfig());
 		this.storage = Storage.getStorage(this);
 		this.storage.setUpTable();
-		this.storage.deleteLogs(config.getDeleteDays());
-
-		this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
-		this.getCommand("itemslogger").setExecutor(new ViewLogList());
-		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
+		this.storage.deleteLogs(this.config.getDeleteDays());
+		this.loadClasses();
 	}
 
 	@Override
 	public void onDisable() {
-		debugMessage("Attempting to log all player data");
-		for (final Player player : Bukkit.getOnlinePlayers()) {
-			if (player.hasPermission("itemslogger.log")) {
-				final ItemPlayer itemPlayer = new ItemPlayer(player, "Restart");
-				itemPlayer.savePlayer();
+		if (this.config.getRestart()) {
+			debugMessage("Attempting to log all player data");
+			for (final Player player : Bukkit.getOnlinePlayers()) {
+				if (player.hasPermission("itemslogger.log")) {
+					final ItemPlayer itemPlayer = new ItemPlayer(player, "Restart");
+					itemPlayer.savePlayer();
+				}
 			}
 		}
 	}
@@ -65,5 +66,23 @@ public class ItemsLogger extends JavaPlugin {
 	public void debugMessage(final String message) {
 		if (config.getDebug())
 			plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
+	}
+
+	private void loadClasses() {
+		debugMessage("Loading classes");
+		if (config.getDeath()) {
+			debugMessage("Registering Death Event");
+			this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
+		}
+		if (config.getJoin()) {
+			debugMessage("Registering Join Event");
+			this.getServer().getPluginManager().registerEvents(new JoinSave(), this);
+		}
+		if (config.getQuit()) {
+			debugMessage("Registering Quit Event");
+			this.getServer().getPluginManager().registerEvents(new QuitSave(), this);
+		}
+		this.getCommand("itemslogger").setExecutor(new ViewLogList());
+		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
 	}
 }

@@ -9,8 +9,12 @@ mysql:
   database: 21C
   delete: 30 #deletes logs older than X days. Set to 0 to never delete.
   
-inventoryStorageType:
-   death:
-      enabled: true #saves inventories on player death
-   restart:
-      enabled: true #saves inventories on server restart
+logTypes:
+  death:
+    enabled: true #logs player when they die
+  restart:
+    enabled: true #logs all players when server restarts
+  join:
+    enabled: true #logs player when the join the server
+  quit:
+    enabled: true #logs player when they quit the server

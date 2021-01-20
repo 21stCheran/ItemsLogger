@@ -1,8 +1,10 @@
+/Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/listeners/JoinSave.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/commands/OpenItemLog.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/ItemPlayer.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/utils/Serialize.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/utils/Storage.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/ItemsLogger.java
+/Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/listeners/QuitSave.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/utils/ChatHandler.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/listeners/DeathSave.java
 /Users/cheran/eclipse-workspace/ItemsLogger/src/main/java/com/twentyonec/ItemsLogger/utils/Config.java
