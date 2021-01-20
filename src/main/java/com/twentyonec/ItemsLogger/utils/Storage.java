@@ -41,7 +41,7 @@ public class Storage {
 	}
 
 	public static synchronized Storage getStorage(ItemsLogger plugin) {
-		
+
 		if (storage == null) {
 			final Config config = plugin.getConfigManager();
 			storage = new Storage(config.getHostname(), config.getPort(), config.getUsername(),
@@ -88,37 +88,18 @@ public class Storage {
 		return this.dataSource.getConnection();
 	}
 
-	public void update(final String sql) {
+	public void update(final String sql, final Object... args) {
 
-		try (Connection connection = this.getConnection()) {
+		try (Connection connection = this.getConnection();
+				PreparedStatement statement = connection.prepareStatement(sql)) {
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			for (int i = 1; i <= args.length; i++) {
+				statement.setObject(i, args[i - 1]);
+			}
 
-			plugin.debugMessage("Preparing statement for update.");
 			statement.executeUpdate();
-			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
 		} catch (SQLException e) {
-			plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
-			e.printStackTrace();
-		}
-
-	}
-
-	public void update(String sql, Date date, Time time) {
-
-		try (Connection connection = this.getConnection()) {
-
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setDate(1, date);
-			statement.setTime(2, time);
-
-			plugin.debugMessage("Preparing statement for update.");
-			statement.executeUpdate();
-			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
-
-		} catch (SQLException e) {
-			plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
 			e.printStackTrace();
 		}
 

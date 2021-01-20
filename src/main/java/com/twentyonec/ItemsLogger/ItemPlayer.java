@@ -55,14 +55,11 @@ public class ItemPlayer {
 	}
 
 	public void savePlayer() {
-
+		
 		final String sql = "INSERT INTO itemslogger"
 				+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
-				+ "VALUES ('" + uuid + "','" + inv + "','" 
-				+ cause + "'," + x + "," + y + "," + z + "," 
-				+ experience + ",?" + ",?" + ");";
-		storage.update(sql, date, time);
-
+				+ "VALUES (?,?,?,?,?,?,?,?,?);";
+		storage.update(sql, uuid.toString(), inv, cause, x, y, z, experience, date, time);
 
 	}
 
