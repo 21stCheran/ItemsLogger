@@ -90,6 +90,7 @@ public class Storage {
 
 	public void update(final String sql, final Object... args) {
 
+		plugin.debugMessage("Preparing statement for update");
 		try (Connection connection = this.getConnection();
 				PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -98,21 +99,27 @@ public class Storage {
 			}
 
 			statement.executeUpdate();
+			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
 		} catch (SQLException e) {
+			plugin.debugMessage("Error while attempting to execute statement update. (" + sql + ")");
 			e.printStackTrace();
 		}
 
 	}
 
-	public ResultSet query(final String sql) {
+	public ResultSet query(final String sql, final Object... args) {
 
 		try (Connection connection = this.getConnection()){
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			plugin.debugMessage("Preparing statement for query.");
-			ResultSet resultSet = statement.executeQuery(sql);
+			for (int i = 1; i <= args.length; i++) {
+				statement.setObject(i, args[i-1]);
+			}
+
+			ResultSet resultSet = statement.executeQuery();
 			plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
 
 			return resultSet;
@@ -163,18 +170,26 @@ public class Storage {
 	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(UUID uuid, String date, String cause, int max, int min) {
 
 		return CompletableFuture.supplyAsync(() -> {
-			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
+			String sql = " SELECT * FROM itemslogger WHERE uuid = ?";
+			ResultSet rs = null;
 
-			if (cause != null) {
-				sql += " AND cause = '" + cause + "'";
+			if (date != null && cause != null) {
+				sql += " AND date = ?";
+				sql += " AND cause = ?";
+				sql += " ORDER BY date DESC, time DESC";
+				rs = storage.query(sql, uuid.toString(), date, cause);
+			} else if (date == null && cause != null) {
+				sql += " AND cause = ?";
+				sql += " ORDER BY date DESC, time DESC";
+				rs = storage.query(sql, uuid.toString(), cause);
+			} else if (date != null && cause == null) {
+				sql += " AND date = ?";
+				sql += " ORDER BY date DESC, time DESC";
+				rs = storage.query(sql, uuid.toString(), date);
+			} else if (date == null && cause == null) {
+				sql += " ORDER BY date DESC, time DESC";
+				rs = storage.query(sql, uuid.toString());
 			}
-
-			if (date != null) {
-				sql += " AND date = '" + date + "'";
-			}
-
-			sql += " ORDER BY date DESC, time DESC";
-			ResultSet rs = storage.query(sql);
 
 			try {
 				List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
@@ -211,10 +226,10 @@ public class Storage {
 	private CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
 
 		return CompletableFuture.supplyAsync(() -> {
-			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"
-					+ "AND date = '" + date + "' AND time = '" + time + "'";
+			String sql = " SELECT * FROM itemslogger WHERE uuid = ?"
+					+ " AND date = ? AND time = ?";
 
-			ResultSet rs = storage.query(sql);
+			ResultSet rs = storage.query(sql, uuid.toString(), date, time);
 
 			try {
 				while (rs.next()) {
@@ -235,5 +250,10 @@ public class Storage {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public void deleteLogs(int days) {
+		String sql = "DELETE FROM itemslogger WHERE date < DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+		this.update(sql, days);
 	}
 }

@@ -13,6 +13,7 @@ public class Config {
 	private final String HOSTNAME_PATH = "mysql.hostname";
 	private final String PORT_PATH = "mysql.port";
 	private final String DATABASE_PATH = "mysql.database";
+	private final String DELETE_PATH = "mysql.delete";
 
 	private final String STORAGE_DEATH = "inventoryStorageType.death.enabled";
 	private final String STORAGE_RESTART = "inventoryStorageType.restart.enabled";
@@ -43,6 +44,10 @@ public class Config {
 
 	public String getDatabase() {
 		return configuration.getString(DATABASE_PATH);
+	}
+	
+	public int getDeleteDays() {
+		return configuration.getInt(DELETE_PATH);
 	}
 
 	public boolean getDeath() {

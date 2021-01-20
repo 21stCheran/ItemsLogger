@@ -20,7 +20,7 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 /**
  * Plugin main class
  * 
- * @version 1.0.1 22 October 2020
+ * @version 1.0.1 20 Jan 2021
  * @author Cheran (21C)
  */
 public class ItemsLogger extends JavaPlugin {
@@ -36,6 +36,7 @@ public class ItemsLogger extends JavaPlugin {
 		this.config = new Config(getConfig());
 		this.storage = Storage.getStorage(this);
 		this.storage.setUpTable();
+		this.storage.deleteLogs(config.getDeleteDays());
 
 		this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
 		this.getCommand("itemslogger").setExecutor(new ViewLogList());
