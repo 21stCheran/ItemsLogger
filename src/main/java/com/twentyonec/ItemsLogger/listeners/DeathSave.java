@@ -18,7 +18,9 @@ public class DeathSave implements Listener {
 	public void onDeathSave(final PlayerDeathEvent event) {
 
 		final Player player = event.getEntity();
-		if (player.hasPermission(Permissions.PERMISSION_LOG)) {
+		if ((plugin.getConfigManager().getDeath()) && 
+				(player.hasPermission(Permissions.PERMISSION_LOG))) {
+			
 			final String cause = event.getDeathMessage();
 			final ItemPlayer itemPlayer = new ItemPlayer(player, cause);
 

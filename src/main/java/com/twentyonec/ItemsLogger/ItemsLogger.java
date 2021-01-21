@@ -5,15 +5,14 @@
  */
 package com.twentyonec.ItemsLogger;
 
-import java.sql.SQLException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.twentyonec.ItemsLogger.commands.MainCommand;
 import com.twentyonec.ItemsLogger.commands.OpenItemLog;
-import com.twentyonec.ItemsLogger.commands.ViewLogList;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
 import com.twentyonec.ItemsLogger.listeners.JoinSave;
 import com.twentyonec.ItemsLogger.listeners.QuitSave;
@@ -58,17 +57,11 @@ public class ItemsLogger extends JavaPlugin {
 			}
 		}
 	}
-	
-	public void reload() throws SQLException {
-		ItemsLogger.plugin = this;
+
+	public void reload() {
+		this.saveDefaultConfig();
 		this.reloadConfig();
 		this.config = new Config(getConfig());
-		this.storage.closeConnection();
-		this.storage = Storage.getNewStorage(plugin);
-		this.storage.setUpTable();
-		this.storage.deleteLogs(this.config.getDeleteDays());
-		this.registerCommands();
-		this.registerEvents();
 	}
 
 	public static ItemsLogger getPlugin() {
@@ -86,25 +79,14 @@ public class ItemsLogger extends JavaPlugin {
 
 	private void registerEvents() {
 		debugMessage("Registering events.");
-		if (config.getDeath()) {
-			debugMessage("Registering Death Event");
-			this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
-		}
-		if (config.getJoin()) {
-			debugMessage("Registering Join Event");
-			this.getServer().getPluginManager().registerEvents(new JoinSave(), this);
-		}
-		if (config.getQuit()) {
-			debugMessage("Registering Quit Event");
-			this.getServer().getPluginManager().registerEvents(new QuitSave(), this);
-		}
-		this.getCommand("itemslogger").setExecutor(new ViewLogList());
-		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
+		this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
+		this.getServer().getPluginManager().registerEvents(new JoinSave(), this);
+		this.getServer().getPluginManager().registerEvents(new QuitSave(), this);
 	}
-	
+
 	private void registerCommands() {
 		debugMessage("Registering commands.");
-		this.getCommand("itemslogger").setExecutor(new ViewLogList());
+		this.getCommand("itemslogger").setExecutor(new MainCommand());
 		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
 	}
 }

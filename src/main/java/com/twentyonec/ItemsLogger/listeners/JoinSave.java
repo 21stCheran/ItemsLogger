@@ -16,10 +16,11 @@ public class JoinSave implements Listener {
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 
 	@EventHandler
-	public void onDeathSave(final PlayerJoinEvent event) {
+	public void onJoinSave(final PlayerJoinEvent event) {
 
 		final Player player = event.getPlayer();
-		if (player.hasPermission(Permissions.PERMISSION_LOG)) {
+		if ((plugin.getConfigManager().getJoin()) && 
+				(player.hasPermission(Permissions.PERMISSION_LOG))) {
 			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.JOIN.toString());
 
 			new BukkitRunnable() {

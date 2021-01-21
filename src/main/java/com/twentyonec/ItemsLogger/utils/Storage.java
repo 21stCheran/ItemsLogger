@@ -51,15 +51,6 @@ public class Storage {
 		return storage;
 	}
 
-	public static synchronized Storage getNewStorage(final ItemsLogger plugin) {
-
-		final Config config = plugin.getConfigManager();
-		storage = new Storage(config.getHostname(), config.getPort(), config.getUsername(),
-				config.getPassword(), config.getDatabase());
-
-		return storage;
-	}
-
 	private void connect() {
 
 		final String jdbcUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;

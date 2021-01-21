@@ -15,10 +15,11 @@ public class QuitSave implements Listener {
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 
 	@EventHandler
-	public void onDeathSave(final PlayerQuitEvent event) {
+	public void onQuitSave(final PlayerQuitEvent event) {
 
 		final Player player = event.getPlayer();
-		if (player.hasPermission(Permissions.PERMISSION_LOG)) {
+		if ((plugin.getConfigManager().getQuit()) && 
+				(player.hasPermission(Permissions.PERMISSION_LOG))) {
 			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.QUIT.toString());
 
 			new BukkitRunnable() {

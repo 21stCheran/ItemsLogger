@@ -1,6 +1,6 @@
 main: com.twentyonec.ItemsLogger.ItemsLogger
 name: ItemsLogger
-version: 1.0.1-Snapshot
+version: 1.1.0-Snapshot
 author: 21C
 api-version: "1.13"
 
@@ -12,7 +12,10 @@ permissions:
      description: Command used to get list of logs.
      default: op
   itemslogger.view:
-    description: Command used to view logged information
+    description: Command used to view logged information.
+    default: op
+  itemslogger.reload:
+    description: Command used to reload the plugin config.
     default: op
  
 commands:

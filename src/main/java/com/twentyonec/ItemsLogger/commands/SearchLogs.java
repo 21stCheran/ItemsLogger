@@ -1,10 +1,7 @@
 package com.twentyonec.ItemsLogger.commands;
 
-import java.sql.SQLException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,26 +13,13 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class ViewLogList implements CommandExecutor {
-
+public class SearchLogs implements CommandInterface {
+	
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 	final private Storage storage = Storage.getStorage(plugin);
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-
-		if (args[0].equalsIgnoreCase("reload")) {
-			plugin.debugMessage("Attempting to reload plugin.");
-			try {
-				plugin.reload();
-			} catch (SQLException e) {
-				plugin.debugMessage("Failed to reload plugin.");
-				e.printStackTrace();
-				return false;
-			}
-			plugin.debugMessage("Successfully reloaded plugin.");
-			return true;
-		}
+	public boolean execute(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("§8[§cItemsLogger§8] §eOnly players may execute this command!");
 			return false;
