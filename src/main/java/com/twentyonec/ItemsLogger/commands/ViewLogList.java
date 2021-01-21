@@ -1,5 +1,7 @@
 package com.twentyonec.ItemsLogger.commands;
 
+import java.sql.SQLException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,6 +24,18 @@ public class ViewLogList implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 
+		if (args[0].equalsIgnoreCase("reload")) {
+			plugin.debugMessage("Attempting to reload plugin.");
+			try {
+				plugin.reload();
+			} catch (SQLException e) {
+				plugin.debugMessage("Failed to reload plugin.");
+				e.printStackTrace();
+				return false;
+			}
+			plugin.debugMessage("Successfully reloaded plugin.");
+			return true;
+		}
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("§8[§cItemsLogger§8] §eOnly players may execute this command!");
 			return false;

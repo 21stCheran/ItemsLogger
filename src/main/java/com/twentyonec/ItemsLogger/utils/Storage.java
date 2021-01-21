@@ -51,6 +51,15 @@ public class Storage {
 		return storage;
 	}
 
+	public static synchronized Storage getNewStorage(final ItemsLogger plugin) {
+
+		final Config config = plugin.getConfigManager();
+		storage = new Storage(config.getHostname(), config.getPort(), config.getUsername(),
+				config.getPassword(), config.getDatabase());
+
+		return storage;
+	}
+
 	private void connect() {
 
 		final String jdbcUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;
@@ -86,6 +95,10 @@ public class Storage {
 
 	private Connection getConnection() throws SQLException {
 		return this.dataSource.getConnection();
+	}
+	
+	public void closeConnection() throws SQLException {
+		this.dataSource.close();
 	}
 
 	public void update(final String sql, final Object... args) {
@@ -170,26 +183,21 @@ public class Storage {
 	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(final UUID uuid, final String date, final String cause, final int max, final int min) {
 
 		return CompletableFuture.supplyAsync(() -> {
-			String sql = " SELECT * FROM itemslogger WHERE uuid = ?";
-			ResultSet rs = null;
+			final String sql = " SELECT * FROM itemslogger WHERE uuid = ?";
 
-			if (date != null && cause != null) {
-				sql += " AND date = ?";
-				sql += " AND cause = ?";
-				sql += " ORDER BY date DESC, time DESC";
-				rs = storage.query(sql, uuid.toString(), date, cause);
-			} else if (date == null && cause != null) {
-				sql += " AND cause = ?";
-				sql += " ORDER BY date DESC, time DESC";
-				rs = storage.query(sql, uuid.toString(), cause);
-			} else if (date != null && cause == null) {
-				sql += " AND date = ?";
-				sql += " ORDER BY date DESC, time DESC";
-				rs = storage.query(sql, uuid.toString(), date);
-			} else if (date == null && cause == null) {
-				sql += " ORDER BY date DESC, time DESC";
-				rs = storage.query(sql, uuid.toString());
+			final StringBuilder sb = new StringBuilder(sql);
+			final List<Object> args = new ArrayList<Object>();
+			args.add(uuid.toString());
+			if (date != null) {
+				sb.append(" AND date = ?");
+				args.add(date);
 			}
+			if (cause != null) {
+				sb.append(" AND cause = ?");
+				args.add(cause);
+			}
+			sb.append(" ORDER BY date DESC, time DESC");
+			final ResultSet rs = storage.query(sb.toString(), args.toArray(new Object[0]));
 
 			try {
 				final List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
@@ -254,7 +262,7 @@ public class Storage {
 
 	public void deleteLogs(final int days) {
 		plugin.debugMessage("Attempting to delete logs older than " + days + " days.");
-		final String sql = "DELETE FROM itemslogger WHERE date < DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+		final String sql = "DELETE FROM itemslogger WHERE DATEDIFF(CURDATE(), date) > ?";
 		this.update(sql, days);
 	}
 }

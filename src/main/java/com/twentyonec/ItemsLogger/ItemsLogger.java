@@ -5,6 +5,7 @@
  */
 package com.twentyonec.ItemsLogger;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -16,13 +17,15 @@ import com.twentyonec.ItemsLogger.commands.ViewLogList;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
 import com.twentyonec.ItemsLogger.listeners.JoinSave;
 import com.twentyonec.ItemsLogger.listeners.QuitSave;
+import com.twentyonec.ItemsLogger.utils.Cause;
 import com.twentyonec.ItemsLogger.utils.Config;
+import com.twentyonec.ItemsLogger.utils.Permissions;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
 /**
  * Plugin main class
  * 
- * @version 1.0.1 20 Jan 2021
+ * @version 1.1.0 20 Jan 2021
  * @author Cheran (21C)
  */
 public class ItemsLogger extends JavaPlugin {
@@ -39,7 +42,8 @@ public class ItemsLogger extends JavaPlugin {
 		this.storage = Storage.getStorage(this);
 		this.storage.setUpTable();
 		this.storage.deleteLogs(this.config.getDeleteDays());
-		this.loadClasses();
+		this.registerCommands();
+		this.registerEvents();
 	}
 
 	@Override
@@ -47,12 +51,24 @@ public class ItemsLogger extends JavaPlugin {
 		if (this.config.getRestart()) {
 			debugMessage("Attempting to log all player data");
 			for (final Player player : Bukkit.getOnlinePlayers()) {
-				if (player.hasPermission("itemslogger.log")) {
-					final ItemPlayer itemPlayer = new ItemPlayer(player, "Restart");
+				if (player.hasPermission(Permissions.PERMISSION_LOG)) {
+					final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.RESTART.toString());
 					itemPlayer.savePlayer();
 				}
 			}
 		}
+	}
+	
+	public void reload() throws SQLException {
+		ItemsLogger.plugin = this;
+		this.reloadConfig();
+		this.config = new Config(getConfig());
+		this.storage.closeConnection();
+		this.storage = Storage.getNewStorage(plugin);
+		this.storage.setUpTable();
+		this.storage.deleteLogs(this.config.getDeleteDays());
+		this.registerCommands();
+		this.registerEvents();
 	}
 
 	public static ItemsLogger getPlugin() {
@@ -68,8 +84,8 @@ public class ItemsLogger extends JavaPlugin {
 			plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
 	}
 
-	private void loadClasses() {
-		debugMessage("Loading classes");
+	private void registerEvents() {
+		debugMessage("Registering events.");
 		if (config.getDeath()) {
 			debugMessage("Registering Death Event");
 			this.getServer().getPluginManager().registerEvents(new DeathSave(), this);
@@ -82,6 +98,12 @@ public class ItemsLogger extends JavaPlugin {
 			debugMessage("Registering Quit Event");
 			this.getServer().getPluginManager().registerEvents(new QuitSave(), this);
 		}
+		this.getCommand("itemslogger").setExecutor(new ViewLogList());
+		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
+	}
+	
+	private void registerCommands() {
+		debugMessage("Registering commands.");
 		this.getCommand("itemslogger").setExecutor(new ViewLogList());
 		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
 	}

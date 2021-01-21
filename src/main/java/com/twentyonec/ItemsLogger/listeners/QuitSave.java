@@ -8,6 +8,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
+import com.twentyonec.ItemsLogger.utils.Cause;
+import com.twentyonec.ItemsLogger.utils.Permissions;
 
 public class QuitSave implements Listener {
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
@@ -16,8 +18,8 @@ public class QuitSave implements Listener {
 	public void onDeathSave(final PlayerQuitEvent event) {
 
 		final Player player = event.getPlayer();
-		if (player.hasPermission("itemslogger.log")) {
-			final ItemPlayer itemPlayer = new ItemPlayer(player, "Quit");
+		if (player.hasPermission(Permissions.PERMISSION_LOG)) {
+			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.QUIT.toString());
 
 			new BukkitRunnable() {
 				@Override

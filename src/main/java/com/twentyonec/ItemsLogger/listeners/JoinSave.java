@@ -8,6 +8,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
+import com.twentyonec.ItemsLogger.utils.Cause;
+import com.twentyonec.ItemsLogger.utils.Permissions;
 
 public class JoinSave implements Listener {
 
@@ -17,8 +19,8 @@ public class JoinSave implements Listener {
 	public void onDeathSave(final PlayerJoinEvent event) {
 
 		final Player player = event.getPlayer();
-		if (player.hasPermission("itemslogger.log")) {
-			final ItemPlayer itemPlayer = new ItemPlayer(player, "Join");
+		if (player.hasPermission(Permissions.PERMISSION_LOG)) {
+			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.JOIN.toString());
 
 			new BukkitRunnable() {
 				@Override
