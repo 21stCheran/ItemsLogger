@@ -1,5 +1,9 @@
 ### Java ###
 *.class
+target/
+
+# OS ##
+*.DS_STORE
 
 # BlueJ files
 *.ctxt
