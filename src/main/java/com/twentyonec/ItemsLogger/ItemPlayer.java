@@ -19,13 +19,13 @@ public class ItemPlayer {
 	private final ItemsLogger plugin = ItemsLogger.getPlugin();
 	private final Storage storage = Storage.getStorage(plugin);
 
-	private UUID uuid;
-	private String inv;
-	private String cause;
-	private int x, y, z;
-	private int experience;
-	private Date date;
-	private Time time;
+	private final UUID uuid;
+	private final String inv;
+	private final String cause;
+	private final int x, y, z;
+	private final int experience;
+	private final Date date;
+	private final Time time;
 
 	public ItemPlayer(final Player player, final String cause) {
 		final java.util.Date longDate = new java.util.Date();
@@ -56,13 +56,11 @@ public class ItemPlayer {
 
 	public void savePlayer() {
 
+		plugin.debugMessage("Attempting to log player data");
 		final String sql = "INSERT INTO itemslogger"
 				+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
-				+ "VALUES ('" + uuid + "','" + inv + "','" 
-				+ cause + "'," + x + "," + y + "," + z + "," 
-				+ experience + ",?" + ",?" + ");";
-		storage.update(sql, date, time);
-
+				+ "VALUES (?,?,?,?,?,?,?,?,?);";
+		storage.update(sql, uuid.toString(), inv, cause, x, y, z, experience, date, time);
 
 	}
 
@@ -74,7 +72,7 @@ public class ItemPlayer {
 			final Inventory inv = Bukkit.createInventory(null, 54, "Death Inventory");
 			inv.addItem(items);
 			sender.openInventory(inv);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -2,26 +2,28 @@ package com.twentyonec.ItemsLogger.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.ChatHandler;
+import com.twentyonec.ItemsLogger.utils.Permissions;
 import com.twentyonec.ItemsLogger.utils.Regex;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class ViewLogList implements CommandExecutor {
-
+public class SearchLogs implements CommandInterface {
+	
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 	final private Storage storage = Storage.getStorage(plugin);
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-
+	public boolean execute(CommandSender sender, Command command, String label, String[] args) {
+		if (!(sender.hasPermission(Permissions.PERMISSION_SEARCH))) {
+			sender.sendMessage("§8[§cItemsLogger§8] §eyou do not have access to this command.");
+		}
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("§8[§cItemsLogger§8] §eOnly players may execute this command!");
 			return false;
