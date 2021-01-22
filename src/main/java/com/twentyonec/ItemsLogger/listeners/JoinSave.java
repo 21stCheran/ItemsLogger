@@ -21,7 +21,7 @@ public class JoinSave implements Listener {
 		final Player player = event.getPlayer();
 		if ((plugin.getConfigManager().getJoin()) && 
 				(player.hasPermission(Permissions.PERMISSION_LOG))) {
-			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.JOIN.toString());
+			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.JOIN);
 
 			new BukkitRunnable() {
 				@Override

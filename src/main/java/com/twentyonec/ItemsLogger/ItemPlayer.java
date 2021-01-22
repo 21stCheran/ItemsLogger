@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.twentyonec.ItemsLogger.utils.Cause;
 import com.twentyonec.ItemsLogger.utils.Serialize;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
@@ -27,7 +28,7 @@ public class ItemPlayer {
 	private final Date date;
 	private final Time time;
 
-	public ItemPlayer(final Player player, final String cause) {
+	public ItemPlayer(final Player player, Cause cause) {
 		final java.util.Date longDate = new java.util.Date();
 
 		this.uuid = player.getUniqueId();
@@ -36,7 +37,7 @@ public class ItemPlayer {
 		this.y = player.getLocation().getBlockY();
 		this.z = player.getLocation().getBlockZ();
 		this.experience = player.getTotalExperience();
-		this.cause = cause;
+		this.cause = cause.toString();
 		this.date = new Date(longDate.getTime());
 		this.time = new Time(longDate.getTime());
 

@@ -4,5 +4,6 @@ public enum Cause {
 
 	RESTART,
 	JOIN,
-	QUIT;
+	QUIT,
+	DEATH;
 }

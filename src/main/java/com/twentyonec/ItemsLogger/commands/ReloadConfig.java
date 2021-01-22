@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.Permissions;
 
-public class Reload implements CommandInterface{
+public class ReloadConfig implements CommandInterface{
 
 	ItemsLogger plugin = ItemsLogger.getPlugin();
 

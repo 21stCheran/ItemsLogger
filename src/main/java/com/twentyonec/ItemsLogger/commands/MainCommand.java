@@ -9,11 +9,11 @@ public class MainCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 
-		CommandInterface cmd = null;
+		CommandInterface cmd;
 
 		switch (args[0].toLowerCase()) {
 		case Cmd.RELOAD:
-			cmd = new Reload();
+			cmd = new ReloadConfig();
 			break;
 		default:
 			cmd = new SearchLogs();

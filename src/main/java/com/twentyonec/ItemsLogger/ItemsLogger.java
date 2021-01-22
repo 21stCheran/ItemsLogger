@@ -51,7 +51,7 @@ public class ItemsLogger extends JavaPlugin {
 			debugMessage("Attempting to log all player data");
 			for (final Player player : Bukkit.getOnlinePlayers()) {
 				if (player.hasPermission(Permissions.PERMISSION_LOG)) {
-					final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.RESTART.toString());
+					final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.RESTART);
 					itemPlayer.savePlayer();
 				}
 			}

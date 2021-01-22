@@ -20,7 +20,7 @@ public class QuitSave implements Listener {
 		final Player player = event.getPlayer();
 		if ((plugin.getConfigManager().getQuit()) && 
 				(player.hasPermission(Permissions.PERMISSION_LOG))) {
-			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.QUIT.toString());
+			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.QUIT);
 
 			new BukkitRunnable() {
 				@Override

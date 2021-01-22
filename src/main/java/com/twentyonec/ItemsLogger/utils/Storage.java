@@ -87,7 +87,7 @@ public class Storage {
 	private Connection getConnection() throws SQLException {
 		return this.dataSource.getConnection();
 	}
-	
+
 	public void closeConnection() throws SQLException {
 		this.dataSource.close();
 	}
@@ -188,16 +188,15 @@ public class Storage {
 				args.add(cause);
 			}
 			sb.append(" ORDER BY date DESC, time DESC");
+			sb.append(" LIMIT ?, ?");
+			args.add(min);
+			args.add(max);
 			final ResultSet rs = storage.query(sb.toString(), args.toArray(new Object[0]));
 
 			try {
 				final List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
-				int i = 0;
 				while (rs.next()) {
-					if ((i<max) && (i >= min)) {
-						playerDataArray.add(initializePlayer(rs));
-					}
-					i++;
+					playerDataArray.add(initializePlayer(rs));
 				}
 				return playerDataArray.toArray(new ItemPlayer[0]);
 			} catch (final SQLException e) {

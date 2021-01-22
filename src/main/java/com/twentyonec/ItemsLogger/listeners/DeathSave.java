@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
+import com.twentyonec.ItemsLogger.utils.Cause;
 import com.twentyonec.ItemsLogger.utils.Permissions;
 
 public class DeathSave implements Listener {
@@ -21,9 +22,7 @@ public class DeathSave implements Listener {
 		if ((plugin.getConfigManager().getDeath()) && 
 				(player.hasPermission(Permissions.PERMISSION_LOG))) {
 			
-			final String cause = event.getDeathMessage();
-			final ItemPlayer itemPlayer = new ItemPlayer(player, cause);
-
+			final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.DEATH);
 			new BukkitRunnable() {
 				@Override
 				public void run() {
