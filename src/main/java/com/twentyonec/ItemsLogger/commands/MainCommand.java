@@ -22,7 +22,3 @@ public class MainCommand implements CommandExecutor{
 	}
 
 }
-
-class Cmd {
-	public final static String RELOAD = "reload";
-}

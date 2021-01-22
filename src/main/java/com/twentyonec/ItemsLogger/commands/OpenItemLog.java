@@ -1,15 +1,22 @@
 package com.twentyonec.ItemsLogger.commands;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.ChatHandler;
 import com.twentyonec.ItemsLogger.utils.Regex;
+import com.twentyonec.ItemsLogger.utils.Serialize;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,17 +30,19 @@ public class OpenItemLog implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("§8[§cItemsLogger§8] §eOnly players may execute this command!");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " Only players may execute this command!");
 			return false;
 		}
 		if (args.length < 4) {
-			sender.sendMessage("§8[§cItemsLogger§8] §eMust specify date, time and type (view or open) !");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " Must specify date, time and type (view or open)!");
 			return false;
 		}
 
 		final Player target = (Bukkit.getServer().getPlayer(args[0]));
 		if (target == null) {
-			sender.sendMessage("§8[§cItemsLogger§8] §e" + args[0] + " is not online!");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW + " " + args[0] + " is not online!");
 			return false;
 		}
 
@@ -53,7 +62,8 @@ public class OpenItemLog implements CommandExecutor {
 		}
 
 		if ((date == null) || (time == null) || (type == null)) {
-			sender.sendMessage("§8[§cItemsLogger§8] §eInvalid format for date, time or type!");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " Invalid format for date, time or type!");
 			return false;
 		}
 
@@ -64,7 +74,17 @@ public class OpenItemLog implements CommandExecutor {
 			sender.spigot().sendMessage(components);
 
 		} else {
-			itemPlayer.loadInventory((Player) sender);;
+			
+			ItemStack[] items;
+			try {
+				items = Serialize.itemStackArrayFromBase64(itemPlayer.getInventory());
+				final Inventory inv = Bukkit.createInventory(null, 54, itemPlayer.getCause() 
+																		+ " Inventory");
+				inv.addItem(items);
+				((HumanEntity) sender).openInventory(inv);
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}

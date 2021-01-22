@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.twentyonec.ItemsLogger.commands.Cmd;
 import com.twentyonec.ItemsLogger.commands.MainCommand;
 import com.twentyonec.ItemsLogger.commands.OpenItemLog;
 import com.twentyonec.ItemsLogger.listeners.DeathSave;
@@ -52,7 +53,7 @@ public class ItemsLogger extends JavaPlugin {
 			for (final Player player : Bukkit.getOnlinePlayers()) {
 				if (player.hasPermission(Permissions.PERMISSION_LOG)) {
 					final ItemPlayer itemPlayer = new ItemPlayer(player, Cause.RESTART);
-					itemPlayer.savePlayer();
+					this.storage.saveItemPlayer(itemPlayer);
 				}
 			}
 		}
@@ -86,7 +87,7 @@ public class ItemsLogger extends JavaPlugin {
 
 	private void registerCommands() {
 		debugMessage("Registering commands.");
-		this.getCommand("itemslogger").setExecutor(new MainCommand());
-		this.getCommand("openitemlog").setExecutor(new OpenItemLog());
+		this.getCommand(Cmd.ITEMSLOGGER).setExecutor(new MainCommand());
+		this.getCommand(Cmd.OPENITEMSLOG).setExecutor(new OpenItemLog());
 	}
 }

@@ -10,10 +10,12 @@ import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.Cause;
 import com.twentyonec.ItemsLogger.utils.Permissions;
+import com.twentyonec.ItemsLogger.utils.Storage;
 
 public class JoinSave implements Listener {
 
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
+	final private Storage storage = Storage.getStorage(plugin);
 
 	@EventHandler
 	public void onJoinSave(final PlayerJoinEvent event) {
@@ -26,7 +28,7 @@ public class JoinSave implements Listener {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					itemPlayer.savePlayer();
+					storage.saveItemPlayer(itemPlayer);
 				}
 			}.runTaskAsynchronously(plugin);
 		}

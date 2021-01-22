@@ -12,6 +12,7 @@ import com.twentyonec.ItemsLogger.utils.Permissions;
 import com.twentyonec.ItemsLogger.utils.Regex;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class SearchLogs implements CommandInterface {
@@ -22,19 +23,23 @@ public class SearchLogs implements CommandInterface {
 	@Override
 	public boolean execute(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender.hasPermission(Permissions.PERMISSION_SEARCH))) {
-			sender.sendMessage("§8[§cItemsLogger§8] §eyou do not have access to this command.");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " you do not have access to this command.");
 		}
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("§8[§cItemsLogger§8] §eOnly players may execute this command!");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " Only players may execute this command!");
 			return false;
 		}
 		if (args.length < 1) {
-			sender.sendMessage("§8[§cItemsLogger§8] §eMust specify player!");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " Must specify player!");
 			return false;
 		}
 		final Player target = (Bukkit.getServer().getPlayer(args[0]));
 		if (target == null) {
-			sender.sendMessage("§8[§cItemsLogger§8] §e" + args[0] + " is not online!");
+			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
+								+ " " + args[0] + " is not online!");
 			return false;
 		}
 

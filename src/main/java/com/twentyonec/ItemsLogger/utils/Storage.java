@@ -255,4 +255,14 @@ public class Storage {
 		final String sql = "DELETE FROM itemslogger WHERE DATEDIFF(CURDATE(), date) > ?";
 		this.update(sql, days);
 	}
+	
+	public void saveItemPlayer(final ItemPlayer itemPlayer) {
+		plugin.debugMessage("Attempting to log player data");
+		final String sql = "INSERT INTO itemslogger"
+				+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
+				+ "VALUES (?,?,?,?,?,?,?,?,?);";
+		storage.update(sql, itemPlayer.getUUID().toString(), itemPlayer.getInventory(), 
+				itemPlayer.getCause(), itemPlayer.getX(), itemPlayer.getY(), itemPlayer.getZ(),
+				itemPlayer.getExperience(), itemPlayer.getDate(), itemPlayer.getTime());
+	}
 }
