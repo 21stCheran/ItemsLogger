@@ -190,7 +190,7 @@ public class Storage {
 			sb.append(" ORDER BY date DESC, time DESC");
 			sb.append(" LIMIT ?, ?");
 			args.add(min);
-			args.add(max);
+			args.add(max - min);
 			final ResultSet rs = storage.query(sb.toString(), args.toArray(new Object[0]));
 
 			try {
