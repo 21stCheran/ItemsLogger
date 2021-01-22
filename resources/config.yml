@@ -15,6 +15,6 @@ logTypes:
   restart:
     enabled: true #logs all players when server restarts
   join:
-    enabled: true #logs player when the join the server
+    enabled: true #logs player when they join the server
   quit:
     enabled: true #logs player when they quit the server

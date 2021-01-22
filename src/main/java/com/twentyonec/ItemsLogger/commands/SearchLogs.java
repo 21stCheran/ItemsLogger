@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.ChatHandler;
+import com.twentyonec.ItemsLogger.utils.Permissions;
 import com.twentyonec.ItemsLogger.utils.Regex;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
@@ -20,6 +21,9 @@ public class SearchLogs implements CommandInterface {
 
 	@Override
 	public boolean execute(CommandSender sender, Command command, String label, String[] args) {
+		if (!(sender.hasPermission(Permissions.PERMISSION_SEARCH))) {
+			sender.sendMessage("§8[§cItemsLogger§8] §eyou do not have access to this command.");
+		}
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("§8[§cItemsLogger§8] §eOnly players may execute this command!");
 			return false;
