@@ -13,12 +13,9 @@ public class Config {
 	private final String HOSTNAME_PATH = "mysql.hostname";
 	private final String PORT_PATH = "mysql.port";
 	private final String DATABASE_PATH = "mysql.database";
-	private final String DELETE_PATH = "mysql.daysToRetainLogs";
 
-	private final String LOG_DEATH = "logTypes.death.enabled";
-	private final String LOG_RESTART = "logTypes.restart.enabled";
-	private final String LOG_JOIN = "logTypes.join.enabled";
-	private final String LOG_QUIT = "logTypes.quit.enabled";
+	private final String STORAGE_DEATH = "inventoryStorageType.death.enabled";
+	private final String STORAGE_RESTART = "inventoryStorageType.restart.enabled";
 
 	public Config(final FileConfiguration configuration) {
 		this.configuration = configuration;
@@ -48,24 +45,12 @@ public class Config {
 		return configuration.getString(DATABASE_PATH);
 	}
 
-	public int getDeleteDays() {
-		return configuration.getInt(DELETE_PATH);
-	}
-
 	public boolean getDeath() {
-		return configuration.getBoolean(LOG_DEATH);
+		return configuration.getBoolean(STORAGE_DEATH);
 	}
 
 	public boolean getRestart() {
-		return configuration.getBoolean(LOG_RESTART);
-	}
-	
-	public boolean getJoin() {
-		return configuration.getBoolean(LOG_JOIN);
-	}
-
-	public boolean getQuit() {
-		return configuration.getBoolean(LOG_QUIT);
+		return configuration.getBoolean(STORAGE_RESTART);
 	}
 
 }
