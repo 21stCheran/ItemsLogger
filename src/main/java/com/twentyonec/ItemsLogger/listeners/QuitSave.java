@@ -28,7 +28,7 @@ public class QuitSave implements Listener {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					storage.saveItemPlayer(itemPlayer);
+					QuitSave.this.storage.saveItemPlayer(itemPlayer);
 				}
 			}.runTaskAsynchronously(plugin);
 		}

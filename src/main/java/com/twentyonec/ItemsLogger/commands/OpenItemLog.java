@@ -3,7 +3,6 @@ package com.twentyonec.ItemsLogger.commands;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.ChatHandler;
+import com.twentyonec.ItemsLogger.utils.Messages;
 import com.twentyonec.ItemsLogger.utils.Regex;
 import com.twentyonec.ItemsLogger.utils.Serialize;
 import com.twentyonec.ItemsLogger.utils.Storage;
@@ -30,19 +30,17 @@ public class OpenItemLog implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " Only players may execute this command!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.NON_PLAYER.formatMessage());
 			return false;
 		}
 		if (args.length < 4) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " Must specify date, time and type (view or open)!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.UNSPECIFIED_ARGS.formatMessage());
 			return false;
 		}
 
 		final Player target = (Bukkit.getServer().getPlayer(args[0]));
 		if (target == null) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW + " " + args[0] + " is not online!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.OFFLINE_PLAYER.formatMessage(args[0]));
 			return false;
 		}
 
@@ -62,19 +60,22 @@ public class OpenItemLog implements CommandExecutor {
 		}
 
 		if ((date == null) || (time == null) || (type == null)) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " Invalid format for date, time or type!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.INVALID_ARGS.formatMessage());
 			return false;
 		}
 
 		ItemPlayer itemPlayer = storage.retrieveItemPlayer(target.getUniqueId(), date, time);
-		if (type.equalsIgnoreCase("view")) {
+		if (itemPlayer == null) {
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.INVALID_ARGS.formatMessage());
+			return false;
+		}
+		if (type.equalsIgnoreCase(Cmd.VIEW)) {
 
 			TextComponent[] components = ChatHandler.sendPlayerData(itemPlayer, target.getName());
 			sender.spigot().sendMessage(components);
 
-		} else {
-			
+		} else if (type.equalsIgnoreCase(Cmd.OPEN)){
+
 			ItemStack[] items;
 			try {
 				items = Serialize.itemStackArrayFromBase64(itemPlayer.getInventory());

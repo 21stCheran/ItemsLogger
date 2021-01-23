@@ -28,7 +28,7 @@ public class DeathSave implements Listener {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					this.storage.saveItemPlayer(itemPlayer);
+					DeathSave.this.storage.saveItemPlayer(itemPlayer);
 				}
 			}.runTaskAsynchronously(plugin);
 		}

@@ -8,38 +8,34 @@ import org.bukkit.entity.Player;
 import com.twentyonec.ItemsLogger.ItemPlayer;
 import com.twentyonec.ItemsLogger.ItemsLogger;
 import com.twentyonec.ItemsLogger.utils.ChatHandler;
+import com.twentyonec.ItemsLogger.utils.Messages;
 import com.twentyonec.ItemsLogger.utils.Permissions;
 import com.twentyonec.ItemsLogger.utils.Regex;
 import com.twentyonec.ItemsLogger.utils.Storage;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class SearchLogs implements CommandInterface {
-	
+
 	final private ItemsLogger plugin = ItemsLogger.getPlugin();
 	final private Storage storage = Storage.getStorage(plugin);
 
 	@Override
 	public boolean execute(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender.hasPermission(Permissions.PERMISSION_SEARCH))) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " you do not have access to this command.");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.NO_PERMISSION.formatMessage(Permissions.PERMISSION_SEARCH));
 		}
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " Only players may execute this command!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.NON_PLAYER.formatMessage());
 			return false;
 		}
 		if (args.length < 1) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " Must specify player!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.UNSPECIFIED_ARGS.formatMessage());
 			return false;
 		}
 		final Player target = (Bukkit.getServer().getPlayer(args[0]));
 		if (target == null) {
-			sender.sendMessage(ChatHandler.PREFIX + ChatColor.YELLOW 
-								+ " " + args[0] + " is not online!");
+			sender.sendMessage(Messages.PREFIX.formatMessage() + Messages.OFFLINE_PLAYER.formatMessage(args[0]));
 			return false;
 		}
 

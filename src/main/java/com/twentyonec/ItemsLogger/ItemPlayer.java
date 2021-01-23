@@ -30,7 +30,7 @@ public class ItemPlayer {
 		this.y = player.getLocation().getBlockY();
 		this.z = player.getLocation().getBlockZ();
 		this.experience = player.getTotalExperience();
-		this.cause = cause.toString();
+		this.cause = cause.getCause();
 		this.date = new Date(longDate.getTime());
 		this.time = new Time(longDate.getTime());
 
