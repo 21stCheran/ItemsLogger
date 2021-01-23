@@ -78,8 +78,8 @@ public class OpenItemLog implements CommandExecutor {
 			ItemStack[] items;
 			try {
 				items = Serialize.itemStackArrayFromBase64(itemPlayer.getInventory());
-				final Inventory inv = Bukkit.createInventory(null, 54, itemPlayer.getCause() 
-																		+ " Inventory");
+				String inventoryName = itemPlayer.getCause() + " Inventory";
+				final Inventory inv = Bukkit.createInventory(null, 54, inventoryName);
 				inv.addItem(items);
 				((HumanEntity) sender).openInventory(inv);
 			} catch (final IOException e) {
