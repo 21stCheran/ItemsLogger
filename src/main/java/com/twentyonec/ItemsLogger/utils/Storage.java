@@ -20,13 +20,13 @@ import com.zaxxer.hikari.HikariDataSource;
 public class Storage {
 
 	private static Storage storage;
-	private ItemsLogger plugin = ItemsLogger.getPlugin();
+	private final ItemsLogger plugin = ItemsLogger.getPlugin();
 
-	private String hostname;
-	private String port;
-	private String username;
-	private String password;
-	private String database;
+	private final String hostname;
+	private final String port;
+	private final String username;
+	private final String password;
+	private final String database;
 
 	private HikariDataSource dataSource;
 
@@ -40,8 +40,8 @@ public class Storage {
 		this.database = database;
 	}
 
-	public static synchronized Storage getStorage(ItemsLogger plugin) {
-		
+	public static synchronized Storage getStorage(final ItemsLogger plugin) {
+
 		if (storage == null) {
 			final Config config = plugin.getConfigManager();
 			storage = new Storage(config.getHostname(), config.getPort(), config.getUsername(),
@@ -55,7 +55,7 @@ public class Storage {
 
 		final String jdbcUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;
 
-		HikariConfig config = new HikariConfig();
+		final HikariConfig config = new HikariConfig();
 
 		config.setPoolName("itemslogger");
 		config.setJdbcUrl(jdbcUrl);
@@ -78,7 +78,7 @@ public class Storage {
 
 		try {
 			this.dataSource = new HikariDataSource(config);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -88,54 +88,46 @@ public class Storage {
 		return this.dataSource.getConnection();
 	}
 
-	public void update(final String sql) {
+	public void closeConnection() throws SQLException {
+		this.dataSource.close();
+	}
 
-		try (Connection connection = this.getConnection()) {
+	public void update(final String sql, final Object... args) {
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+		plugin.debugMessage("Preparing statement for update");
+		try (Connection connection = this.getConnection();
+				PreparedStatement statement = connection.prepareStatement(sql)) {
 
-			plugin.debugMessage("Preparing statement for update.");
+			for (int i = 1; i <= args.length; i++) {
+				statement.setObject(i, args[i - 1]);
+			}
+
 			statement.executeUpdate();
 			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
-		} catch (SQLException e) {
-			plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
+		} catch (final SQLException e) {
+			plugin.debugMessage("Error while attempting to execute statement update. (" + sql + ")");
 			e.printStackTrace();
 		}
 
 	}
 
-	public void update(String sql, Date date, Time time) {
-
-		try (Connection connection = this.getConnection()) {
-
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setDate(1, date);
-			statement.setTime(2, time);
-
-			plugin.debugMessage("Preparing statement for update.");
-			statement.executeUpdate();
-			plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
-
-		} catch (SQLException e) {
-			plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
-			e.printStackTrace();
-		}
-
-	}
-
-	public ResultSet query(final String sql) {
+	public ResultSet query(final String sql, final Object... args) {
 
 		try (Connection connection = this.getConnection()){
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			final PreparedStatement statement = connection.prepareStatement(sql);
 
 			plugin.debugMessage("Preparing statement for query.");
-			ResultSet resultSet = statement.executeQuery(sql);
+			for (int i = 1; i <= args.length; i++) {
+				statement.setObject(i, args[i-1]);
+			}
+
+			final ResultSet resultSet = statement.executeQuery();
 			plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
 
 			return resultSet;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
 			e.printStackTrace();
 			return null;
@@ -159,53 +151,55 @@ public class Storage {
 		this.update(createTableQuery);
 	}
 
-	private ItemPlayer initializePlayer(ResultSet rs) {
+	private ItemPlayer initializePlayer(final ResultSet rs) {
 
 		try {
-			UUID uuid = UUID.fromString(rs.getString("uuid"));
-			String inv = rs.getString("inventory");
-			String cause = rs.getString("cause");
-			int x = rs.getInt("loc_x");
-			int y = rs.getInt("loc_y");
-			int z = rs.getInt("loc_z");
-			int experience = rs.getInt("experience");
-			Date date = rs.getDate("date");
-			Time time = rs.getTime("time");
+			final UUID uuid = UUID.fromString(rs.getString("uuid"));
+			final String inv = rs.getString("inventory");
+			final String cause = rs.getString("cause");
+			final int x = rs.getInt("loc_x");
+			final int y = rs.getInt("loc_y");
+			final int z = rs.getInt("loc_z");
+			final int experience = rs.getInt("experience");
+			final Date date = rs.getDate("date");
+			final Time time = rs.getTime("time");
 
 			return new ItemPlayer(uuid, inv, cause, x, y, z, experience, date, time);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(UUID uuid, String date, String cause, int max, int min) {
+	private CompletableFuture<ItemPlayer[]> retrieveLogListAsync(final UUID uuid, final String date, final String cause, final int max, final int min) {
 
 		return CompletableFuture.supplyAsync(() -> {
-			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'";
+			final String sql = " SELECT * FROM itemslogger WHERE uuid = ?";
 
-			if (cause != null) {
-				sql += " AND cause = '" + cause + "'";
-			}
-
+			final StringBuilder sb = new StringBuilder(sql);
+			final List<Object> args = new ArrayList<Object>();
+			args.add(uuid.toString());
 			if (date != null) {
-				sql += " AND date = '" + date + "'";
+				sb.append(" AND date = ?");
+				args.add(date);
 			}
-
-			sql += " ORDER BY date DESC, time DESC";
-			ResultSet rs = storage.query(sql);
+			if (cause != null) {
+				sb.append(" AND cause = ?");
+				args.add(cause);
+			}
+			sb.append(" ORDER BY date DESC, time DESC");
+			sb.append(" LIMIT ?, ?");
+			args.add(min);
+			args.add(max - min);
+			final ResultSet rs = storage.query(sb.toString(), args.toArray(new Object[0]));
 
 			try {
-				List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
-				int i = 0;
+				final List<ItemPlayer>playerDataArray = new ArrayList<ItemPlayer>();
 				while (rs.next()) {
-					if ((i<max) && (i >= min)) {
-						playerDataArray.add(initializePlayer(rs));
-					}
-					i++;
+					playerDataArray.add(initializePlayer(rs));
 				}
 				return playerDataArray.toArray(new ItemPlayer[0]);
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -213,10 +207,10 @@ public class Storage {
 
 	}
 
-	public ItemPlayer[] retrieveLogList(UUID uuid, String date, String cause, int index) {
+	public ItemPlayer[] retrieveLogList(final UUID uuid, final String date, final String cause, final int index) {
 
-		int max = index * 10;
-		int min = max - 10;
+		final int max = index * 10;
+		final int min = max - 10;
 
 		try {
 			return retrieveLogListAsync(uuid, date, cause, max, min).get();
@@ -227,26 +221,26 @@ public class Storage {
 
 	}
 
-	private CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(UUID uuid, String date, String time) {
+	private CompletableFuture<ItemPlayer>  retrieveItemPlayerAsync(final UUID uuid, final String date, final String time) {
 
 		return CompletableFuture.supplyAsync(() -> {
-			String sql = " SELECT * FROM itemslogger WHERE uuid = '" + uuid + "'"
-					+ "AND date = '" + date + "' AND time = '" + time + "'";
+			final String sql = " SELECT * FROM itemslogger WHERE uuid = ?"
+					+ " AND date = ? AND time = ?";
 
-			ResultSet rs = storage.query(sql);
+			final ResultSet rs = storage.query(sql, uuid.toString(), date, time);
 
 			try {
 				while (rs.next()) {
 					return initializePlayer(rs);
 				}
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				e.printStackTrace();
 			}
 			return null;
 		});
 	}
 
-	public ItemPlayer retrieveItemPlayer(UUID uuid, String date, String time) {
+	public ItemPlayer retrieveItemPlayer(final UUID uuid, final String date, final String time) {
 
 		try {
 			return retrieveItemPlayerAsync(uuid, date, time).get();
@@ -254,5 +248,21 @@ public class Storage {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public void deleteLogs(final int days) {
+		plugin.debugMessage("Attempting to delete logs older than " + days + " days.");
+		final String sql = "DELETE FROM itemslogger WHERE DATEDIFF(CURDATE(), date) > ?";
+		this.update(sql, days);
+	}
+	
+	public void saveItemPlayer(final ItemPlayer itemPlayer) {
+		plugin.debugMessage("Attempting to log player data");
+		final String sql = "INSERT INTO itemslogger"
+				+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
+				+ "VALUES (?,?,?,?,?,?,?,?,?);";
+		storage.update(sql, itemPlayer.getUUID().toString(), itemPlayer.getInventory(), 
+				itemPlayer.getCause(), itemPlayer.getX(), itemPlayer.getY(), itemPlayer.getZ(),
+				itemPlayer.getExperience(), itemPlayer.getDate(), itemPlayer.getTime());
 	}
 }

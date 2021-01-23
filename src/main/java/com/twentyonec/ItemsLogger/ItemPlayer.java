@@ -1,33 +1,27 @@
 package com.twentyonec.ItemsLogger;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
+
+import com.twentyonec.ItemsLogger.utils.Cause;
 import com.twentyonec.ItemsLogger.utils.Serialize;
-import com.twentyonec.ItemsLogger.utils.Storage;
 
 public class ItemPlayer {
 
-	private final ItemsLogger plugin = ItemsLogger.getPlugin();
-	private final Storage storage = Storage.getStorage(plugin);
+	private final UUID uuid;
+	private final String inv;
+	private final String cause;
+	private final int x, y, z;
+	private final int experience;
+	private final Date date;
+	private final Time time;
 
-	private UUID uuid;
-	private String inv;
-	private String cause;
-	private int x, y, z;
-	private int experience;
-	private Date date;
-	private Time time;
-
-	public ItemPlayer(final Player player, final String cause) {
+	public ItemPlayer(final Player player, Cause cause) {
 		final java.util.Date longDate = new java.util.Date();
 
 		this.uuid = player.getUniqueId();
@@ -36,7 +30,7 @@ public class ItemPlayer {
 		this.y = player.getLocation().getBlockY();
 		this.z = player.getLocation().getBlockZ();
 		this.experience = player.getTotalExperience();
-		this.cause = cause;
+		this.cause = cause.getCause();
 		this.date = new Date(longDate.getTime());
 		this.time = new Time(longDate.getTime());
 
@@ -54,32 +48,10 @@ public class ItemPlayer {
 		this.time = time;
 	}
 
-	public void savePlayer() {
-
-		final String sql = "INSERT INTO itemslogger"
-				+ "(uuid, inventory, cause, loc_x, loc_y, loc_z, experience, date, time) " 
-				+ "VALUES ('" + uuid + "','" + inv + "','" 
-				+ cause + "'," + x + "," + y + "," + z + "," 
-				+ experience + ",?" + ",?" + ");";
-		storage.update(sql, date, time);
-
-
-	}
-
-	public void loadInventory(final Player sender) {
-
-		ItemStack[] items;
-		try {
-			items = Serialize.itemStackArrayFromBase64(this.inv);
-			final Inventory inv = Bukkit.createInventory(null, 54, "Death Inventory");
-			inv.addItem(items);
-			sender.openInventory(inv);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	//getters
+	public UUID getUUID() {
+		return this.uuid;
+	}
 	public String getInventory() {
 		return this.inv;
 	}
@@ -94,6 +66,18 @@ public class ItemPlayer {
 	}
 	public int getExperience() {
 		return this.experience;
+	}
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
+	public int getZ() {
+		return z;
+	}
+	public Time getTime() {
+		return time;
 	}
 
 
