@@ -58,9 +58,5 @@ public enum Messages {
     private String getMessage() {
         return this.message;
     }
-	
-	public static void main(String[] args) {
-		System.out.println(Messages.PREFIX.getMessage() + Messages.CONFIG_RELOADED.getMessage());
-	}
 
 }
