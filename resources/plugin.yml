@@ -1,29 +1,29 @@
 main: com.twentyonec.ItemsLogger.ItemsLogger
 name: ItemsLogger
-version: 1.1.0-Snapshot
+version: 1.2.0-Snapshot
 author: 21C
-api-version: "1.13"
+api-version: "1.21"
 
 permissions:
   itemslogger.log:
     description: Allows the player to get logged.
     default: op
   itemslogger.search:
-     description: Command used to get list of logs.
-     default: op
+    description: Command used to get list of logs.
+    default: op
   itemslogger.view:
     description: Command used to view logged information.
     default: op
   itemslogger.reload:
     description: Command used to reload the plugin config.
     default: op
- 
+
 commands:
-   itemslogger:
-     description: Displays list of logs
-     usage: /itemslogger [player] <date> <cause> <index>
-     permission: itemslogger.search
-   openitemlog:
-     description: Diplays log info
-     usage: /openitemslog [player] [view|open] [date] [time]
-     permission: itemslogger.view
+  itemslogger:
+    description: Displays list of logs
+    usage: /itemslogger [player] <date> <cause> <index>
+    permission: itemslogger.search
+  openitemlog:
+    description: Diplays log info
+    usage: /openitemslog [player] [view|open] [date] [time]
+    permission: itemslogger.view

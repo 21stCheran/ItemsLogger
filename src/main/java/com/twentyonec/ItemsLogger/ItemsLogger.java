@@ -25,7 +25,7 @@ import com.twentyonec.ItemsLogger.utils.Storage;
 /**
  * Plugin main class
  * 
- * @version 1.1.0 20 Jan 2021
+ * @version 1.2.0 21 September 2025
  * @author Cheran (21C)
  */
 public class ItemsLogger extends JavaPlugin {
