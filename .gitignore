@@ -45,6 +45,9 @@ hs_err_pid*
 .classpath
 org.eclipse.buildship.core.prefs
 
+# GitHub workflows and actions
+.github/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
