@@ -4,6 +4,9 @@ target/
 
 # OS ##
 *.DS_STORE
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # BlueJ files
 *.ctxt
@@ -19,11 +22,14 @@ target/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-### vscode ###
-.vscode
-.project
-.classpath
-org.eclipse.buildship.core.prefs
+### VS Code ###
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
 
 ### Gradle ###
 .gradle
@@ -35,6 +41,9 @@ org.eclipse.buildship.core.prefs
 
 # Eclipse
 .settings/
+.project
+.classpath
+org.eclipse.buildship.core.prefs
 
 # Ignore Gradle GUI config
 gradle-app.setting
